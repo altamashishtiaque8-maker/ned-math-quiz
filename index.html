@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NED Mathematics Entry Test Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root{
+  --bg:#0a0e1a; --bg2:#0d1220; --panel:#141a2e; --panel2:#1a2138;
+  --line:#262f4a; --line2:#33405f;
+  --text:#e8ecf5; --muted:#8d99b8; --muted2:#647095;
+  --indigo:#6366f1; --violet:#a855f7; --cyan:#22d3ee;
+  --green:#22c55e; --green-bg:rgba(34,197,94,.13); --green-line:rgba(34,197,94,.5);
+  --red:#ef4444; --red-bg:rgba(239,68,68,.13); --red-line:rgba(239,68,68,.5);
+  --orange:#f59e0b; --amber-bg:rgba(245,158,11,.13);
+  --grad:linear-gradient(90deg,#6366f1 0%,#a855f7 50%,#22d3ee 100%);
+  --grad-text:linear-gradient(90deg,#818cf8 0%,#c084fc 45%,#67e8f9 100%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;background:
+  radial-gradient(1100px 600px at 12% -8%,rgba(99,102,241,.16),transparent 55%),
+  radial-gradient(900px 600px at 92% 0%,rgba(168,85,247,.13),transparent 55%),
+  radial-gradient(900px 700px at 50% 115%,rgba(34,211,238,.10),transparent 55%),
+  var(--bg);}
+.mono{font-family:'DM Mono',monospace}
+
+/* top progress bar */
+#topbar{position:fixed;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,.05);z-index:60}
+#topfill{height:100%;width:0;background:linear-gradient(90deg,#6366f1,#a855f7,#22d3ee,#a855f7,#6366f1);background-size:200% 100%;animation:slide 6s linear infinite;transition:width .35s ease}
+@keyframes slide{0%{background-position:0 0}100%{background-position:200% 0}}
+
+.wrap{max-width:920px;margin:0 auto;padding:0 18px 90px}
+.screen{display:none;animation:fade .4s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.gradtext{background:var(--grad-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ===== COVER ===== */
+#cover{padding-top:70px;text-align:center}
+.kicker{font-family:'DM Mono',monospace;font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;color:var(--cyan);margin-bottom:18px}
+#cover h1{font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(2.3rem,6vw,3.7rem);line-height:1.05;letter-spacing:-.5px;margin-bottom:14px}
+#cover .sub{color:var(--muted);font-size:1.05rem;max-width:540px;margin:0 auto 38px}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 26px;min-width:140px}
+.stat .n{font-family:'DM Mono',monospace;font-size:2rem;font-weight:500;background:var(--grad-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.stat .l{font-size:.78rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.12em;margin-top:4px}
+.pickwrap{margin-bottom:30px}
+.pickwrap .ttl{font-size:.8rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.16em;margin-bottom:14px}
+.picks{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.pick{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:13px;padding:15px 22px;cursor:pointer;font-family:inherit;font-size:.96rem;font-weight:600;transition:.18s;text-align:left;min-width:188px}
+.pick:hover{border-color:var(--line2);transform:translateY(-2px)}
+.pick.sel{border-color:transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,var(--grad) border-box;border:1.5px solid transparent;box-shadow:0 0 0 1px rgba(99,102,241,.25),0 10px 30px -12px rgba(99,102,241,.5)}
+.pick .pn{display:block;font-size:.72rem;color:var(--muted2);font-weight:500;font-family:'DM Mono',monospace;margin-top:3px}
+.pick.sel .pn{color:var(--cyan)}
+.btn{font-family:inherit;cursor:pointer;border:none;border-radius:13px;font-weight:700;transition:.18s}
+.btn-primary{background:var(--grad);color:#fff;padding:16px 44px;font-size:1.05rem;box-shadow:0 12px 34px -10px rgba(124,92,247,.65)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -10px rgba(124,92,247,.8)}
+.btn-ghost{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:13px 26px;font-size:.95rem;font-weight:600}
+.btn-ghost:hover{border-color:var(--line2)}
+.fmtnote{color:var(--muted2);font-size:.84rem;margin-top:22px;line-height:1.7}
+
+/* ===== QUIZ HEADER ===== */
+.qhead{position:sticky;top:4px;z-index:40;background:rgba(13,18,32,.82);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:16px;padding:13px 16px;margin:22px 0 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.qhead .seg{display:flex;align-items:center;gap:7px;font-size:.9rem}
+.qhead .seg .ic{width:9px;height:9px;border-radius:50%}
+.dot-g{background:var(--green)} .dot-i{background:var(--indigo)} .dot-c{background:var(--cyan)}
+.qhead .v{font-family:'DM Mono',monospace;font-weight:500}
+.timer.warn{color:var(--orange)}
+.qhead .spacer{flex:1}
+.hbtn{background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:9px;padding:7px 13px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer}
+.hbtn:hover{color:var(--text);border-color:var(--line2)}
+.barwrap{height:7px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-bottom:24px;border:1px solid var(--line)}
+#qbar{height:100%;width:0;background:var(--grad);transition:width .3s ease}
+
+/* ===== QUESTION CARD ===== */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:26px 26px 24px}
+.qtags{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+.qnum{font-family:'DM Mono',monospace;font-weight:500;background:var(--grad);color:#fff;padding:6px 13px;border-radius:9px;font-size:.86rem}
+.tag{font-size:.72rem;font-weight:600;padding:5px 11px;border-radius:8px;letter-spacing:.04em}
+.tag-src{background:var(--panel2);border:1px solid var(--line2);color:var(--muted)}
+.tag-unc{background:var(--amber-bg);border:1px solid rgba(245,158,11,.4);color:var(--orange)}
+.qtext{font-size:1.18rem;line-height:1.6;margin-bottom:22px;font-weight:500}
+.opts{display:flex;flex-direction:column;gap:11px}
+.opt{display:flex;align-items:center;gap:14px;background:var(--panel2);border:1.5px solid var(--line);border-radius:13px;padding:14px 16px;cursor:pointer;transition:.15s;text-align:left;font-family:inherit;color:var(--text);font-size:1.02rem;width:100%}
+.opt:hover:not(.locked){border-color:var(--line2);background:#1e2742}
+.opt .lab{flex-shrink:0;width:30px;height:30px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-weight:500;font-size:.9rem;color:var(--muted)}
+.opt .ot{flex:1}
+.opt.locked{cursor:default}
+.opt.correct{border-color:var(--green-line);background:var(--green-bg)}
+.opt.correct .lab{background:var(--green);border-color:var(--green);color:#04210f}
+.opt.wrong{border-color:var(--red-line);background:var(--red-bg)}
+.opt.wrong .lab{background:var(--red);border-color:var(--red);color:#2a0606}
+.opt.dim{opacity:.5}
+.fb{margin-top:18px;padding:13px 16px;border-radius:12px;font-size:.95rem;font-weight:600;display:none}
+.fb.show{display:block;animation:fade .3s ease}
+.fb.ok{background:var(--green-bg);border:1px solid var(--green-line);color:#7ee9a6}
+.fb.no{background:var(--red-bg);border:1px solid var(--red-line);color:#ffa3a3}
+.fb .note{display:block;font-weight:400;color:var(--muted);font-size:.86rem;margin-top:6px}
+
+/* nav buttons */
+.navrow{display:flex;gap:12px;margin-top:22px}
+.navrow .btn-ghost{flex:1;text-align:center}
+.navrow .btn-ghost:disabled{opacity:.4;cursor:not-allowed}
+
+/* navigator grid */
+.navgrid-ttl{font-size:.78rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.16em;margin:30px 0 13px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;font-size:.78rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:4px;display:inline-block}
+.lg-cur{background:var(--indigo)} .lg-ok{background:var(--green)} .lg-no{background:var(--red)} .lg-sk{background:var(--panel2);border:1px solid var(--line2)}
+.navgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:8px}
+.ncell{aspect-ratio:1;border-radius:9px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-family:'DM Mono',monospace;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;padding:0}
+.ncell:hover{border-color:var(--line2);color:var(--text)}
+.ncell.cur{background:var(--indigo);border-color:var(--indigo);color:#fff;box-shadow:0 0 0 2px rgba(99,102,241,.35)}
+.ncell.ok{background:var(--green-bg);border-color:var(--green-line);color:#7ee9a6}
+.ncell.no{background:var(--red-bg);border-color:var(--red-line);color:#ffa3a3}
+.ncell.cur.ok,.ncell.cur.no{box-shadow:0 0 0 2px rgba(99,102,241,.55);outline:2px solid var(--indigo);outline-offset:1px}
+.finishrow{margin-top:28px;text-align:center}
+
+/* ===== RESULTS ===== */
+#results{padding-top:40px;text-align:center}
+.rscore{font-family:'DM Mono',monospace;font-size:clamp(3.6rem,13vw,6rem);font-weight:500;line-height:1;background:var(--grad-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.rlabel{color:var(--muted);font-size:1rem;margin:6px 0 36px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:36px}
+.rcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px 16px}
+.rcard .n{font-family:'DM Mono',monospace;font-size:1.9rem;font-weight:500}
+.rcard .l{font-size:.76rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.12em;margin-top:5px}
+.rcard.c .n{color:var(--green)} .rcard.w .n{color:var(--red)} .rcard.s .n{color:var(--muted)} .rcard.t .n{color:var(--cyan)}
+.ractions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ===== REVIEW ===== */
+#review{padding-top:30px}
+#review h2{font-family:'Playfair Display',serif;font-size:1.9rem;margin-bottom:6px}
+#review .rsub{color:var(--muted);margin-bottom:24px}
+.rvfilters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
+.rvf{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:9px;padding:8px 15px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
+.rvf.sel{color:var(--text);border-color:var(--line2);background:var(--panel2)}
+.rv{background:var(--panel);border:1px solid var(--line);border-left-width:4px;border-radius:13px;padding:18px 20px;margin-bottom:14px}
+.rv.ok{border-left-color:var(--green)} .rv.no{border-left-color:var(--red)} .rv.sk{border-left-color:var(--muted2)}
+.rv .rvtags{display:flex;gap:8px;align-items:center;margin-bottom:11px;flex-wrap:wrap}
+.rv .rvn{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--muted);background:var(--panel2);padding:4px 10px;border-radius:7px}
+.rv .rvstat{font-size:.74rem;font-weight:700;padding:4px 10px;border-radius:7px;text-transform:uppercase;letter-spacing:.05em}
+.rvstat.ok{background:var(--green-bg);color:#7ee9a6} .rvstat.no{background:var(--red-bg);color:#ffa3a3} .rvstat.sk{background:var(--panel2);color:var(--muted)}
+.rv .rvq{font-size:1.05rem;font-weight:500;margin-bottom:13px;line-height:1.55}
+.rv .rvans{font-size:.94rem;margin:5px 0;color:var(--muted)}
+.rv .rvans b{color:var(--text);font-weight:600}
+.rv .rvans.cans b{color:#7ee9a6} .rv .rvans.yans-no b{color:#ffa3a3}
+.backtop{text-align:center;margin-top:10px}
+
+/* footer */
+.foot{text-align:center;color:var(--muted2);font-size:.82rem;margin-top:54px;padding-top:22px;border-top:1px solid var(--line)}
+.foot .by{font-family:'Playfair Display',serif;color:var(--muted);font-style:italic}
+
+@media(max-width:560px){
+  .card{padding:20px 16px}
+  .qtext{font-size:1.08rem}
+  .opt{font-size:.96rem;padding:12px 13px}
+  .qhead{gap:10px;padding:11px 13px}
+  .qhead .seg{font-size:.82rem}
+  .navgrid{grid-template-columns:repeat(auto-fill,minmax(36px,1fr))}
+  .pick{min-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="topbar"><div id="topfill"></div></div>
+<div class="wrap">
+
+<!-- ================= COVER ================= -->
+<section id="cover" class="screen active">
+  <div class="kicker">NED University &middot; Engineering Entry Test</div>
+  <h1>Mathematics<br><span class="gradtext">Practice Portal</span></h1>
+  <p class="sub">A complete, shuffled question bank compiled from two full NED mathematics entry-test papers. Answer, get instant feedback, then review everything at the end.</p>
+  <div class="stats">
+    <div class="stat"><div class="n" id="stTotal">0</div><div class="l">Total Questions</div></div>
+    <div class="stat"><div class="n" id="stPick">0</div><div class="l">In This Set</div></div>
+    <div class="stat"><div class="n">4</div><div class="l">Options Each</div></div>
+  </div>
+  <div class="pickwrap">
+    <div class="ttl">Choose your question set</div>
+    <div class="picks" id="picks">
+      <button class="pick sel" data-paper="all">All Questions<span class="pn" id="pnAll">both papers</span></button>
+      <button class="pick" data-paper="2025">2025 Paper Only<span class="pn" id="pn2025">recreation set</span></button>
+      <button class="pick" data-paper="2023">2023 Paper Only<span class="pn" id="pn2023">handout set</span></button>
+    </div>
+  </div>
+  <button class="btn btn-primary" id="startBtn">Start Test</button>
+  <p class="fmtnote">Questions are shuffled on every run. Math is rendered live. Some items flagged "answer uncertain" had no reliable key in the source and were worked out by hand.</p>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section id="quiz" class="screen">
+  <div class="qhead">
+    <div class="seg"><span class="ic dot-i"></span><span class="v" id="hPos">1 / 1</span></div>
+    <div class="seg"><span class="ic dot-g"></span><span class="v" id="hCorrect">0 correct</span></div>
+    <div class="seg"><span class="ic dot-c"></span><span class="v" id="hAnswered">0 answered</span></div>
+    <div class="spacer"></div>
+    <div class="seg"><span class="v timer" id="hTimer">00:00</span></div>
+    <button class="hbtn" id="finishTop">Finish</button>
+  </div>
+  <div class="barwrap"><div id="qbar"></div></div>
+
+  <div class="card">
+    <div class="qtags" id="qtags"></div>
+    <div class="qtext" id="qtext"></div>
+    <div class="opts" id="opts"></div>
+    <div class="fb" id="fb"></div>
+  </div>
+
+  <div class="navrow">
+    <button class="btn btn-ghost" id="prevBtn">Previous</button>
+    <button class="btn btn-ghost" id="nextBtn">Next</button>
+  </div>
+
+  <div class="navgrid-ttl">Question Navigator</div>
+  <div class="legend">
+    <span><i class="lg-cur"></i> Current</span>
+    <span><i class="lg-ok"></i> Correct</span>
+    <span><i class="lg-no"></i> Wrong</span>
+    <span><i class="lg-sk"></i> Unanswered</span>
+  </div>
+  <div class="navgrid" id="navgrid"></div>
+  <div class="finishrow"><button class="btn btn-primary" id="finishBtn">Finish Test</button></div>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<section id="results" class="screen">
+  <div class="rscore" id="rScore">0%</div>
+  <div class="rlabel" id="rLabel">Your score</div>
+  <div class="rgrid">
+    <div class="rcard c"><div class="n" id="rCorrect">0</div><div class="l">Correct</div></div>
+    <div class="rcard w"><div class="n" id="rWrong">0</div><div class="l">Wrong</div></div>
+    <div class="rcard s"><div class="n" id="rSkipped">0</div><div class="l">Skipped</div></div>
+    <div class="rcard t"><div class="n" id="rTime">00:00</div><div class="l">Time Taken</div></div>
+  </div>
+  <div class="ractions">
+    <button class="btn btn-primary" id="reviewBtn">Review Answers</button>
+    <button class="btn btn-ghost" id="restartBtn">Restart Test</button>
+    <button class="btn btn-ghost" id="homeBtn">Back to Home</button>
+  </div>
+</section>
+
+<!-- ================= REVIEW ================= -->
+<section id="review" class="screen">
+  <h2>Review Answers</h2>
+  <p class="rsub" id="rvSub"></p>
+  <div class="rvfilters">
+    <button class="rvf sel" data-f="all">All</button>
+    <button class="rvf" data-f="ok">Correct</button>
+    <button class="rvf" data-f="no">Wrong</button>
+    <button class="rvf" data-f="sk">Skipped</button>
+  </div>
+  <div id="rvList"></div>
+  <div class="backtop">
+    <button class="btn btn-ghost" id="rvBack">Back to Results</button>
+  </div>
+</section>
+
+<div class="foot">
+  Compiled for NED engineering entry-test preparation. Verify any flagged answers against your own working.<br>
+  <span class="by">prepared By Altamash</span>
+</div>
+
+</div><!-- /wrap -->
+
+<script type="text/plain" id="qdata">
+2025|~|1|~|1|~|0|~|If the average of 8 students on a test is 77 and 4 of them got 73 marks, what is the sum of scores of the other 4?|~|238|~|324|~|782|~|812
+###
+2025|~|2|~|1|~|0|~|Find the volume of the parallelepiped whose three edges are \(\vec a = 2\hat i - 3\hat j + 4\hat k\), \(\vec b = \hat i + 2\hat j - \hat k\) and \(\vec c = 3\hat i - \hat j + 2\hat k\).|~|6|~|7|~|5|~|4
+###
+2025|~|3|~|0|~|0|~|If \(f(x) = x^7 - 9x^6 + x^5 - 81x^3 + 90\) then \(f(9)\) is equal to:|~|90|~|10|~|\(-80\)|~|\(-40\)
+###
+2025|~|4|~|3|~|0|~|\(\dfrac{1}{1+\sin\theta} - \dfrac{1}{1-\sin\theta} = \)|~|\(\sec^2\theta\)|~|\(2\,\mathrm{cosec}\,\theta\)|~|\(2\sec^2\theta\)|~|\(-2\tan\theta\sec\theta\)
+###
+2025|~|5|~|1|~|0|~|\(\dfrac{d}{dx}\left(e^{x^2}\right) = ?\)|~|\(e^{x^2}\)|~|\(2x\,e^{x^2}\)|~|\(2 + x\,e^{x^2}\)|~|none
+###
+2025|~|6|~|3|~|0|~|The term independent of \(x\) in \(\left(x^2 - \dfrac{2}{x^2}\right)^{12}\) is:|~|54136|~|31136|~|53136|~|59136
+###
+2025|~|7|~|2|~|0|~|If \(2^a = x\) then the value of \(2^{a+3}\) is equal to|~|\(x\)|~|\(4x\)|~|\(8x\)|~|\(16x\)
+###
+2025|~|8|~|0|~|0|~|\(P(A)=\tfrac13,\ P(B)=\tfrac13,\ P(A\cap B)=\tfrac19\). Find \(P(A\cup B)'\):|~|\(\tfrac49\)|~|\(1\)|~|\(\tfrac59\)|~|\(\tfrac69\)
+###
+2025|~|9|~|2|~|0|~|If \(\int_1^3 f(x)\,dx = 3\) then \(\int_1^3 5f(x)\,dx = \)|~|1|~|4|~|15|~|5
+###
+2025|~|10|~|3|~|0|~|Cofactor \(A_{32}\) of \(\begin{bmatrix}1&2&3\\4&0&-1\\0&0&2\end{bmatrix}\) is:|~|\(-15\)|~|\(1\)|~|\(15\)|~|none
+###
+2025|~|11|~|1|~|0|~|\(\displaystyle\int e^{x^2}\,x\,dx = \)|~|\(e^{x^2}+C\)|~|\(\tfrac12 e^{x^2}+C\)|~|\(e^{x^2}+C\)|~|\(2e^{x^2}+C\)
+###
+2025|~|12|~|1|~|0|~|The values of \(0!\) and \(1!\) respectively are:|~|0 and 1|~|1 and 1|~|1 and 0|~|0 and 0
+###
+2025|~|13|~|3|~|0|~|If \(y = 6x^5 - 4x^4\) then \(\dfrac{d^2y}{dx^2}\) at \(x=1\) is:|~|2|~|12|~|65|~|72
+###
+2025|~|14|~|0|~|0|~|If \(A\) is a square matrix and \(A^2 = I\) then \(A\) is:|~|Involutory matrix|~|Idempotent matrix|~|Symmetric matrix|~|Hermitian matrix
+###
+2025|~|15|~|3|~|1|~|If \(\sqrt{\dfrac{1+\cos A}{1-\cos A}} = \dfrac{x}{y}\) then \(\tan A = \)|~|\(\dfrac{2xy}{\sqrt{1-4x^2y^2}}\)|~|\(\dfrac{xy}{\sqrt{1+4x^2y^2}}\)|~|\(\dfrac{xy}{\sqrt{x^2-y^2}}\)|~|none
+###
+2025|~|16|~|0|~|0|~|If a line through \((6,2)\) and \((3,-2)\) is parallel to the line through \((3,y)\) and \((7,1)\), find \(y\).|~|\(-\tfrac{13}{3}\)|~|\(-\tfrac14\)|~|\(\tfrac16\)|~|\(-\tfrac{1}{11}\)
+###
+2025|~|17|~|3|~|0|~|Find the total number of integers divisible by 7 between 256 and 789.|~|33|~|45|~|65|~|76
+###
+2025|~|18|~|0|~|0|~|If \(3x + (y-2)i = 5 - 2x + (3y-8)i\) then \((x,y) = \)|~|\((1,3)\)|~|\((3,1)\)|~|\((2,4)\)|~|\((4,7)\)
+###
+2025|~|19|~|2|~|0|~|The gradient of the curve \(x^3 + y^3 + 3x - 6y + 9 = 0\) at \((1,2)\) is|~|0|~|4|~|\(-1\)|~|2
+###
+2025|~|20|~|0|~|0|~|If \(\sqrt{y} - e^x = 2\) then find \(\dfrac{dy}{dx}\)|~|\(2\sqrt{y}\,e^x\)|~|\(\dfrac{2\sqrt{y}}{e^x}\)|~|\(\dfrac{2e^x}{\sqrt{y}}\)|~|None
+###
+2025|~|21|~|2|~|0|~|If \(x = \cos t\) and \(y = \sin t\) then \(\dfrac{dy}{dx} = \)|~|\(\cos t\)|~|\(\sin t\)|~|\(-\cot t\)|~|\(-\tan t\)
+###
+2025|~|22|~|0|~|0|~|The vertices of the ellipse \(2x^2 + y^2 = 10\) are|~|\((0,\pm\sqrt{10})\)|~|\((0,\pm\sqrt5)\)|~|\((\pm\sqrt{10},0)\)|~|\((\pm\sqrt5,0)\)
+###
+2025|~|23|~|0|~|0|~|Equation of asymptotes for the hyperbola \(9x^2 - 16y^2 = 144\) are:|~|\(y = \pm\tfrac{3x}{4}\)|~|\(y = \pm\tfrac{x}{4}\)|~|\(y = \pm\tfrac{x}{3}\)|~|\(y = \pm\tfrac{4x}{3}\)
+###
+2025|~|24|~|0|~|0|~|The value of \(i^{18} + i^{32} - i^{67} = \)|~|\(i\)|~|\(-i\)|~|\(1\)|~|\(-1\)
+###
+2025|~|25|~|3|~|0|~|Find the vertices of the hyperbola \(4x^2 - y^2 = 16\)|~|\((0,\pm4)\)|~|\((0,\pm2)\)|~|\((\pm4,0)\)|~|\((\pm2,0)\)
+###
+2025|~|26|~|1|~|0|~|\(\begin{vmatrix}1&0&0\\0&\omega&0\\0&0&\omega^2\end{vmatrix} = \)|~|0|~|1|~|\(-1\)|~|\(\omega\)
+###
+2025|~|27|~|0|~|0|~|Solve \(\dfrac{x+2}{x-2} + \dfrac{x-2}{x+2} = \dfrac{34}{15}\)|~|\(\{8,-8\}\)|~|\(\{4,-4\}\)|~|\(\{2,-4\}\)|~|\(\{-2,4\}\)
+###
+2025|~|28|~|3|~|0|~|The value of \(\dfrac{\sin^4\theta - \cos^4\theta}{\sin^2\theta - \cos^2\theta} = \)|~|\(\sin^2\theta - \cos^2\theta\)|~|\(\tan\theta\)|~|0|~|1
+###
+2025|~|29|~|3|~|0|~|If \(2^3(2^2) = 2^k\) then the value of \(k\) is:|~|1|~|2|~|3|~|5
+###
+2025|~|30|~|1|~|0|~|The integral \(\displaystyle\int_0^1 \dfrac{1}{1+x^2}\,dx = \)|~|\(\tfrac{\pi}{2}\)|~|\(\tfrac{\pi}{4}\)|~|\(\pi\)|~|\(\tfrac{\pi}{6}\)
+###
+2025|~|31|~|0|~|0|~|In triangle \(ABC\), \(A=42^\circ,\ B=78^\circ,\ c=9\) cm. The values of \(a\) and \(b\) respectively are:|~|6.95 and 10.15|~|7 and 10|~|4.62 and 8.93|~|10.14 and 5.32
+###
+2025|~|32|~|2|~|0|~|Middle terms in the expansion of \(\left(x^3 + \dfrac{1}{x^2}\right)^7\) are:|~|4th only|~|5th only|~|Both 4th and 5th|~|none
+###
+2025|~|33|~|0|~|0|~|In a G.P., if \(T_3 = \tfrac94\) and \(T_6 = \tfrac{243}{32}\) then the first term and common ratio are:|~|\(1\) and \(\tfrac32\)|~|\(\tfrac34\) and \(1\)|~|\(\tfrac23\) and \(\tfrac{21}{4}\)|~|\(-1\) and \(\tfrac{4}{21}\)
+###
+2025|~|34|~|1|~|0|~|The vertices of the ellipse \(\dfrac{x^2}{25} + \dfrac{y^2}{9} = 1\) are:|~|\((\pm3,0)\)|~|\((\pm5,0)\)|~|\((0,\pm3)\)|~|\((0,\pm5)\)
+###
+2025|~|35|~|0|~|0|~|\(\displaystyle\int \dfrac{2x}{1+x^2}\,dx = \)|~|\(\ln|1+x^2| + C\)|~|\(\dfrac{1}{\ln|1+x^2|} + C\)|~|\(\dfrac{2}{\ln x} + C\)|~|\(\dfrac1x + C\)
+###
+2025|~|36|~|2|~|0|~|If \(f(x) = 2x + 3\), then what is \(f(4)\)?|~|9|~|10|~|11|~|12
+###
+2025|~|37|~|2|~|0|~|The derivative of \(\sin x\) with respect to \(x\) is:|~|\(-\sin x\)|~|\(-\cos x\)|~|\(\cos x\)|~|\(\sin x\)
+###
+2025|~|38|~|0|~|0|~|What is \(\displaystyle\int 2x\,dx\)?|~|\(x^2 + C\)|~|\(2x + C\)|~|\(\tfrac{x^2}{2} + C\)|~|\(2x^2 + C\)
+###
+2025|~|39|~|0|~|0|~|If the determinant of \(\begin{bmatrix}a&b\\c&d\end{bmatrix}\) is \(ad-bc\), what is the determinant of \(\begin{bmatrix}2&3\\4&5\end{bmatrix}\)?|~|\(-2\)|~|2|~|10|~|8
+###
+2025|~|40|~|0|~|0|~|What is the solution to \(x^2 - 5x + 6 = 0\)?|~|\(x = 2\) or \(3\)|~|\(x = -2\) or \(-3\)|~|\(x = 1\) or \(6\)|~|\(x = -1\) or \(-6\)
+###
+2025|~|41|~|2|~|0|~|Find the least number of terms \(n\) in the G.P. \(4, 8, 16, \ldots\) such that the sum exceeds 900.|~|6|~|7|~|8|~|9
+###
+2025|~|42|~|0|~|0|~|\(\vec F = 3\hat i + 2\hat j - 4\hat k\) is applied at \((1,-1,0)\). What is the moment about \((2,1,-3)\)?|~|\(2\hat i + 5\hat j + 4\hat k\)|~|\(-5\hat i + 3\hat j + 2\hat k\)|~|\(-5\hat i + 6\hat j + 2\hat k\)|~|\(3\hat i + 2\hat j + \hat k\)
+###
+2025|~|43|~|0|~|0|~|The centre of the circle \(x^2 + y^2 - 6x + 8y + 1 = 0\) is:|~|\((3,-4)\)|~|\((-3,4)\)|~|\((6,-8)\)|~|\((3,4)\)
+###
+2025|~|44|~|0|~|0|~|If \(y = a^x\), then \(\dfrac{dy}{dx} = ?\)|~|\(a^x \ln a\)|~|\(x a^x\)|~|\(a^x \ln x\)|~|\(a^x\)
+###
+2025|~|45|~|0|~|0|~|What are the direction cosines of the vector from \((1,-3,2)\) to \((3,-5,1)\)?|~|\(\left(\tfrac23, -\tfrac23, -\tfrac13\right)\)|~|\(\left(\tfrac23, \tfrac23, \tfrac13\right)\)|~|\(\left(-\tfrac23, \tfrac23, \tfrac13\right)\)|~|\(\left(-\tfrac23, -\tfrac23, -\tfrac13\right)\)
+###
+2025|~|46|~|1|~|0|~|The quadratic equation with roots \(a\) and \(2a\) is:|~|\(x^2 + 3ax + 2a^2 = 0\)|~|\(x^2 - 3ax + 2a^2 = 0\)|~|\(x^2 + 3ax + a^2 = 0\)|~|\(x^2 - ax - 2a^2 = 0\)
+###
+2025|~|47|~|3|~|0|~|\(\dfrac{d}{dx}[\ln(\sin x)] = ?\)|~|\(\dfrac{1}{\sin x}\)|~|\(\cot x\)|~|\(\dfrac{\cos x}{\sin x}\)|~|Both b and c
+###
+2025|~|48|~|0|~|1|~|Evaluate \(\displaystyle\int_0^{\pi/4} \cos^4 x\,dx\). (Exact value \(\tfrac{3\pi}{32}+\tfrac14\); option a is the intended key.)|~|\(\dfrac{3\pi}{16} + \dfrac14\)|~|\(\dfrac{3\pi}{16}\)|~|\(\dfrac{\pi}{4}\)|~|\(\dfrac{5\pi}{16}\)
+###
+2025|~|49|~|0|~|0|~|If two vectors are perpendicular, their scalar (dot) product is:|~|0|~|1|~|Maximum|~|Undefined
+###
+2025|~|50|~|0|~|0|~|The equation of an ellipse is \(4x^2 + 25y^2 = 100\). What are the equations of the directrices?|~|\(x = \pm\dfrac{25}{\sqrt{21}}\)|~|\(y = \pm\dfrac{25}{\sqrt{21}}\)|~|\(x = \pm\dfrac52\)|~|\(x = \pm\dfrac{25}{3}\)
+###
+2025|~|51|~|0|~|0|~|\(\displaystyle\int e^x(x^2 + 2x)\,dx = \)|~|\(x^2 e^x + C\)|~|\(2x e^x + C\)|~|\(2x + 2 + C\)|~|\(2e^x + x^2 + C\)
+###
+2025|~|52|~|2|~|0|~|\(\displaystyle\int \tan x \sec^2 x\,dx = \)|~|\(\sec x \tan x + C\)|~|\(2\sec x + C\)|~|\(\tfrac12 \sec^2 x + C\)|~|\(\tan x + C\)
+###
+2025|~|53|~|1|~|0|~|\(\dfrac{x-36}{(x+2)^2(x-3)} = \)|~|\(\dfrac{A}{x+2} + \dfrac{B}{x+2} + \dfrac{C}{x-3}\)|~|\(\dfrac{Ax+B}{(x+2)^2} + \dfrac{C}{x-3}\)|~|\(\dfrac{A}{(x+2)^2} + \dfrac{C}{x-3}\)|~|none
+###
+2025|~|54|~|0|~|0|~|\(\dfrac{\cos\theta}{\tan\theta \sin\theta} = \)|~|\(\cot^2\theta\)|~|\(\tan^2\theta\)|~|\(\sec^2\theta\)|~|\(\mathrm{cosec}^2\theta\)
+###
+2025|~|55|~|0|~|0|~|Find the vertices of \(4x^2 + y^2 = 16\)|~|\((0,\pm4)\)|~|\((\pm4,0)\)|~|\((\pm2,0)\)|~|\((0,\pm2)\)
+###
+2025|~|56|~|0|~|0|~|Find the distance between the vertices of \(9y^2 - 4x^2 = 36\)|~|4|~|6|~|2|~|3
+###
+2025|~|57|~|2|~|0|~|In the expansion of \((3+x)^7\) the coefficient of \(x^3\) is:|~|2035|~|1766|~|2835|~|2563
+###
+2025|~|58|~|0|~|0|~|\(y = (\tan^{-1} x)^2\), then \(\dfrac{dy}{dx} = \)|~|\(\dfrac{2\tan^{-1} x}{1+x^2}\)|~|\(\dfrac{\tan^{-1} x}{1+x^2}\)|~|\(\dfrac{\cot^{-1} x}{1-x^2}\)|~|\(\dfrac{2\cot^{-1} x}{1-x^2}\)
+###
+2025|~|59|~|0|~|0|~|If \(A\) is a square matrix and \(A^2 = A\) then \(A\) is:|~|Idempotent matrix|~|Identity matrix|~|Hermitian matrix|~|Symmetric matrix
+###
+2025|~|60|~|0|~|0|~|The magnitude of \(\vec A = 3\hat i - \hat j + 2\hat k\)|~|\(\sqrt{14}\)|~|\(\sqrt9\)|~|\(\sqrt{17}\)|~|4
+###
+2025|~|61|~|1|~|0|~|\(\displaystyle\lim_{x\to\infty} \dfrac{\ln x}{x} = \)|~|\(\infty\)|~|0|~|1|~|None
+###
+2025|~|62|~|1|~|0|~|Equation of the perpendicular bisector of the join of \((5,4)\) and \((-4,2)\)|~|\(y = \tfrac29 x + 3\)|~|\(y = -\tfrac92 x + \tfrac{21}{4}\)|~|\(y = -\tfrac29 x + 3\)|~|\(y = \tfrac92 x - \tfrac{21}{4}\)
+###
+2025|~|63|~|0|~|0|~|Find the centre and radius of the circle \(3x^2 + 3y^2 + 6x - 2y + 2 = 0\)|~|\(r=\tfrac23,\ \left(-1,\tfrac13\right)\)|~|\(r=\tfrac32,\ (1,3)\)|~|\(r=\tfrac23,\ \left(\tfrac13,-1\right)\)|~|\(r=\tfrac32,\ (3,1)\)
+###
+2025|~|64|~|2|~|0|~|\(\displaystyle\lim_{x\to a} \dfrac{x^n - a^n}{x-a} = \)|~|\(a^{n-1}\)|~|\(x^n - a\)|~|\(n a^{n-1}\)|~|\(n a^{x-1}\)
+###
+2025|~|65|~|3|~|0|~|If \(y = x^{\cos x}\), then \(\dfrac{dy}{dx} = \)|~|\(\cos x\, x^{\cos x - 1}\)|~|\(-x^{\cos x}\left(\tfrac{\sin x}{x} - \cos x \ln x\right)\)|~|\(x^{\cos x}\left(\tfrac{\cos x}{x} + \sin x \ln x\right)\)|~|\(x^{\cos x}\left(\tfrac{\cos x}{x} - \sin x \ln x\right)\)
+###
+2025|~|66|~|1|~|0|~|\(\dfrac{d}{dx}\left(\sqrt{x} + \dfrac{1}{\sqrt{x}}\right)^2 = \)|~|\(\dfrac1x\)|~|\(1 - \dfrac{1}{x^2}\)|~|\(x + \dfrac{1}{x^2}\)|~|\(1 + x\)
+###
+2025|~|67|~|0|~|0|~|\(\dfrac{x+34}{(x-6)(x+2)} = \)|~|\(\dfrac{A}{x-6} + \dfrac{B}{x+2}\)|~|\(\dfrac{A}{x-6} - \dfrac{B}{x+2}\)|~|\(\dfrac{Ax+B}{x-6} + \dfrac{C}{x+2}\)|~|None
+###
+2025|~|68|~|2|~|0|~|Coefficient of the term involving \(x^5\) in \(\left(1 + \dfrac{x}{2}\right)^7\) is:|~|\(\tfrac{25}{32}\)|~|\(\tfrac96\)|~|\(\tfrac{21}{32}\)|~|\(\tfrac{36}{21}\)
+###
+2025|~|69|~|2|~|0|~|\(\dfrac{d}{dx}\left[\dfrac{f(x)}{g(x)}\right] = \)|~|\(\dfrac{g(x)f'(x) + g'(x)f(x)}{[g(x)]^2}\)|~|\(\dfrac{g'(x)f'(x) - g(x)f(x)}{[g(x)]^2}\)|~|\(\dfrac{g(x)f'(x) - g'(x)f(x)}{[g(x)]^2}\)|~|none
+###
+2025|~|70|~|1|~|0|~|Find the latus rectum of the hyperbola \(4x^2 - 3y^2 = 12\).|~|\(\dfrac{4}{\sqrt3}\)|~|\(\dfrac{8}{\sqrt3}\)|~|\(\dfrac{6}{\sqrt2}\)|~|\(\dfrac32\)
+###
+2025|~|71|~|0|~|0|~|\(\displaystyle\int_0^1 \dfrac{1}{9+x^2}\,dx = \)|~|\(\tfrac13 \tan^{-1}\tfrac13\)|~|\(\tan^{-1}\tfrac13\)|~|\(2\tan^{-1}\tfrac13\)|~|none
+###
+2025|~|72|~|0|~|0|~|From a deck of cards, find the probability of getting a non-ace card.|~|\(\tfrac{12}{13}\)|~|\(\tfrac{1}{26}\)|~|\(\tfrac{1}{13}\)|~|\(\tfrac{26}{13}\)
+###
+2025|~|73|~|1|~|0|~|\(\sin\dfrac{\beta}{2} = \)|~|\(\sqrt{\dfrac{1+\cos\beta}{2}}\)|~|\(\sqrt{\dfrac{1-\cos\beta}{2}}\)|~|\(\dfrac{1+\cos\beta}{2}\)|~|\(\dfrac{1-\cos\beta}{2}\)
+###
+2025|~|74|~|1|~|0|~|If \(f(z) = \sqrt{z^2 + 8z}\), the difference of the function when \(z\) increases from 7 to 8 is:|~|2.092|~|1.06|~|0.88|~|1.23
+###
+2025|~|75|~|0|~|0|~|The equation of a line parallel to \(x = 4y\) and passing through \((3,4)\).|~|\(x - 4y = -13\)|~|\(x + 4y = 13\)|~|\(x - 4y = 13\)|~|\(4x - y = 13\)
+###
+2025|~|76|~|2|~|0|~|For \(3x^2 + kx + 9 = 0\), if roots are equal then find \(k\).|~|\(6\sqrt3\)|~|\(-6\sqrt3\)|~|both a and b|~|None
+###
+2025|~|77|~|0|~|0|~|\(\dfrac13 \displaystyle\int \dfrac{3}{1+x^2}\,dx = \)|~|\(\tan^{-1} x + C\)|~|\(\tfrac13 \tan^{-1} x + C\)|~|\(\tan^{-1}(3x) + C\)|~|\(\dfrac{3}{1+x^2} + C\)
+###
+2025|~|78|~|1|~|0|~|If \(f(x) = x^x\), then find \(\dfrac{dy}{dx}\)|~|\(x^x \ln x\)|~|\(x^x(1 + \ln x)\)|~|\(x \cdot x^x\)|~|\(x^{x-1}(1 + \ln x)\)
+###
+2025|~|79|~|3|~|0|~|\(\sin\theta + \sin(-\theta) + \cos\theta + \cos(-\theta) = ?\)|~|\(2\sin\theta + 2\cos\theta\)|~|\(-2\sin\theta - 2\cos\theta\)|~|\(2\sin\theta\)|~|\(2\cos\theta\)
+###
+2025|~|80|~|1|~|0|~|Correct partial fraction of \(\dfrac{1}{x^3 - 1}\):|~|\(\dfrac{A}{x-1} + \dfrac{B}{x^2+x+1}\)|~|\(\dfrac{A}{x-1} + \dfrac{Bx+C}{x^2+x+1}\)|~|\(\dfrac{A}{x-1} + \dfrac{B}{(x-1)^2} + \dfrac{C}{(x-1)^3}\)|~|\(\dfrac{A}{x-1} + \dfrac{B}{x^2-1} + \dfrac{C}{x^3-1}\)
+###
+2025|~|81|~|2|~|0|~|\((A \cup B)' = \)|~|\(A \cap B\)|~|\(A \cup B\)|~|\(A' \cap B'\)|~|\(A' \cup B'\)
+###
+2025|~|82|~|1|~|0|~|\((3 - 2i)^2 - 6(3 - 2i) = \)|~|\(4i\)|~|\(-13\)|~|\(-2i\)|~|5
+###
+2025|~|83|~|2|~|0|~|In an H.P., the 10th term is 35 and the 34th term is 25. If the last term is 2, find the number of terms.|~|500|~|700|~|1000|~|1500
+###
+2025|~|84|~|2|~|0|~|\((a^2)^3 + b^2 \cdot b^3 = \)|~|\(a^6 + b^6\)|~|\(a^6 - b^6\)|~|\(a^6 + b^5\)|~|\(a^5 - b^3\)
+###
+2025|~|85|~|0|~|0|~|Which law reduces to the form of the Pythagoras theorem?|~|Law of Cosine|~|Law of Tangent|~|Law of Sine|~|Half-angle formula
+###
+2025|~|86|~|2|~|0|~|If \(y = 6x^5 - 4x^4\), then \(\dfrac{d^2y}{dx^2}\) at \(x=1\) is:|~|2|~|12|~|72|~|264
+###
+2025|~|87|~|0|~|0|~|\(\displaystyle\int_0^{\pi/2} \sin^3 x \cos x\,dx = \)|~|\(\tfrac14\)|~|\(\tfrac12\)|~|\(\tfrac18\)|~|\(\tfrac23\)
+###
+2025|~|88|~|0|~|0|~|\(\dfrac{a^{-1} + b^{-1}}{a^{-1}} = \)|~|\(1 + \dfrac{a}{b}\)|~|\(\dfrac{a}{1+ab}\)|~|\(\dfrac{1}{1+ab}\)|~|\(a^2(1+ab)\)
+###
+2025|~|89|~|0|~|0|~|\(\displaystyle\lim_{x\to0}\left(\dfrac1x - \dfrac{1}{e^x - 1}\right) = \)|~|\(\tfrac12\)|~|\(\tfrac23\)|~|\(\tfrac14\)|~|2
+###
+2025|~|90|~|3|~|0|~|In triangle \(ABC\) with sides \(a,b,c\), the value of \(\cos\dfrac{\alpha}{2} = \)|~|\(\sqrt{\dfrac{(s-b)(s-c)}{bc}}\)|~|\(\sqrt{\dfrac{(s-b)(s-c)}{ac}}\)|~|\(\sqrt{\dfrac{s-b}{bc}}\)|~|\(\sqrt{\dfrac{s(s-a)}{bc}}\)
+###
+2025|~|91|~|0|~|0|~|If \(a=2,\ b=3,\ c=5\), then find \(s\):|~|5|~|7|~|8|~|4
+###
+2025|~|92|~|3|~|0|~|\(\dfrac{(n+1)!}{(n-1)!} = \)|~|\(n\)|~|\(n(n-1)\)|~|\(n+1\)|~|\(n(n+1)\)
+###
+2025|~|93|~|0|~|0|~|The eccentricity of a circle is:|~|0|~|\(-1\)|~|1|~|\(\sqrt2\)
+###
+2025|~|94|~|0|~|0|~|Partial fraction of \(\dfrac{1}{x(x^2+2x+3)} = \)|~|\(\dfrac{A}{x} + \dfrac{Bx+C}{x^2+2x+3}\)|~|\(\dfrac{Ax+B}{x} + \dfrac{C}{x^2+2x+3}\)|~|\(\dfrac{A}{x} - \dfrac{Bx+C}{x^2+2x+3}\)|~|\(\dfrac{Ax+B}{x} - \dfrac{C}{x^2+2x+3}\)
+###
+2025|~|95|~|0|~|0|~|\(\displaystyle\int_0^{\pi/2} \cos^2 2x\,dx = ?\)|~|\(\tfrac{\pi}{4}\)|~|\(\tfrac{\pi}{8}\)|~|\(\tfrac{\pi}{2}\)|~|\(\pi\)
+###
+2025|~|96|~|2|~|0|~|\(\displaystyle\int_0^{\pi} \sqrt{1 - \cos^2 x}\,dx = \)|~|0|~|1|~|2|~|\(\tfrac{\pi}{2}\)
+###
+2025|~|97|~|0|~|0|~|If \(16^x = 4\) and \(5^{x+y} = 625\), find \(y\)|~|\(\tfrac72\)|~|2|~|\(\tfrac92\)|~|3
+###
+2025|~|98|~|1|~|0|~|The integral \(\displaystyle\int_{\pi/4}^{\pi/3} \tan x\,dx = \)|~|\(\tfrac13 \ln 3\)|~|\(\tfrac12 \ln 2\)|~|\(\tfrac12\)|~|\(\tfrac14\)
+###
+2025|~|99|~|1|~|0|~|If \(x^4 + y^4 = 1250\), find the slope at \((5,5)\)|~|1|~|\(-1\)|~|\(\tfrac15\)|~|\(-2\)
+###
+2025|~|100|~|2|~|0|~|If \(f(x) = \cos x\), then find \(f''\left(\tfrac{\pi}{2}\right) = ?\)|~|1|~|\(-1\)|~|0|~|\(\tfrac12\)
+###
+2025|~|101|~|2|~|0|~|\(\displaystyle\lim_{x\to0} x\ln x = ?\)|~|\(-\infty\)|~|\(+\infty\)|~|0|~|1
+###
+2025|~|102|~|1|~|0|~|\(\dfrac{1}{1+\sin\theta} - \dfrac{1}{1-\sin\theta} = ?\)|~|\(\dfrac{2\sin\theta}{\cos^2\theta}\)|~|\(-\dfrac{2\sin\theta}{\cos^2\theta}\)|~|\(2\tan\theta\sec\theta\)|~|0
+###
+2025|~|103|~|3|~|0|~|If \(\sin x = \tfrac34\), find \(\cos x\)|~|\(\tfrac{\sqrt7}{4}\)|~|\(-\tfrac{\sqrt7}{4}\)|~|\(\tfrac54\)|~|both a and b
+###
+2025|~|104|~|2|~|0|~|\(\dfrac{d}{dx}\left(\dfrac{e^x - 1}{e^x + 1}\right) = \)|~|\(\dfrac{-2e^x}{(e^x-1)^2}\)|~|\(\dfrac{e^x}{(e^x-1)^2}\)|~|\(\dfrac{2e^x}{(e^x+1)^2}\)|~|\(\dfrac{e^x(e^x-1)}{(e^x+1)^2}\)
+###
+2025|~|105|~|0|~|0|~|Find the area of the triangle with vertices \((3,2),(1,-5),(2,3)\):|~|4.5|~|3.2|~|6|~|9.6
+###
+2025|~|106|~|1|~|0|~|\(16x^2 + (ay)^2 = (4a)^2\) with foci \((\pm3,0)\), find \(a\)|~|3|~|5|~|8|~|9
+###
+2025|~|107|~|2|~|0|~|If \(f(x) = ax^2 + bx + c\) with \(f(1)=3\) and \(f(-1)=3\), find \(a+c\)|~|0|~|1|~|3|~|6
+###
+2025|~|108|~|0|~|0|~|Find the scalar area of the triangle with vertices \((1,1,1),(-1,0,0),(0,0,1)\).|~|\(\dfrac{\sqrt3}{2}\)|~|\(\sqrt3\)|~|1|~|\(\tfrac32\)
+###
+2025|~|109|~|3|~|0|~|\((\vec A - \vec B) \times (\vec A + \vec B) = ?\)|~|0|~|\(-2\vec A \vec B\)|~|\((\vec A)^2 - (\vec B)^2\)|~|\(2(\vec A \times \vec B)\)
+###
+2025|~|110|~|1|~|0|~|A pool is 40 ft long with depth 4 ft on one side and 8 ft on the other. What is the distance along the bottom between the sides?|~|40 feet|~|40.2 feet|~|41 feet|~|44 feet
+###
+2025|~|111|~|2|~|0|~|In a gym of 83 people, 51 do kick-boxing, 25 do yoga and 11 do both. How many take part in neither?|~|9|~|11|~|18|~|21
+###
+2025|~|112|~|0|~|0|~|The probability of getting the same face when throwing two dice simultaneously.|~|\(\tfrac16\)|~|\(\tfrac13\)|~|\(\tfrac14\)|~|\(\tfrac15\)
+###
+2025|~|113|~|0|~|0|~|If \(A\) is a square matrix and \(A^{k+1} = A\) (\(k\) a positive integer) then \(A\) is:|~|Periodic matrix|~|Idempotent matrix|~|Symmetric matrix|~|Hermitian matrix
+###
+2025|~|114|~|0|~|0|~|If \(A, G, H\) are the arithmetic, geometric and harmonic means between two numbers, which holds?|~|\(G^2 = AH\)|~|\(G = A/H\)|~|\(A^2 = GH\)|~|\(G = \tfrac{A+H}{2}\)
+###
+2025|~|115|~|1|~|0|~|\(i^{18} + i^{32} - i^{67} = ?\)|~|\(-i\)|~|\(i\)|~|0|~|\(2i\)
+###
+2025|~|116|~|0|~|0|~|If \(A = \begin{bmatrix}2&-2&0\\-3&1&2\\1&-3&-1\end{bmatrix}\), \(|A| = 12\) and \(B\) is the transpose of \(A\), find \(|B|\)|~|12|~|\(-12\)|~|\(\tfrac{1}{12}\)|~|\(-\tfrac{1}{12}\)
+###
+2025|~|117|~|1|~|0|~|If \(f(x) = \tan^{-1} 3x\) then \(f'(x) = \)|~|\(\dfrac{1}{1+9x^2}\)|~|\(\dfrac{3}{1+9x^2}\)|~|\(\dfrac{9}{1+3x^2}\)|~|\(\dfrac{1}{1+9x^2}\)
+###
+2025|~|118|~|0|~|0|~|\(\displaystyle\int \dfrac{e^{1/u}}{u^2}\,du = ?\)|~|\(-e^{1/u} + C\)|~|\(e^{1/u} + C\)|~|\(u e^{1/u} + C\)|~|\(-u e^{1/u} + C\)
+###
+2025|~|119|~|0|~|0|~|If \(2^3 \cdot 2^2 = 2^k\), then find \(k\)|~|5|~|6|~|9|~|4
+###
+2025|~|120|~|0|~|0|~|\(\dfrac{x^3 - 3x^2 + 5x - 32}{x-2} = ?\)|~|\(x^2 - x + 3 - \dfrac{26}{x-2}\)|~|\(x^2 - x + 3 + \dfrac{26}{x-2}\)|~|\(x^2 + x + 3 - \dfrac{26}{x-2}\)|~|\(x^2 - x + 2 - \dfrac{26}{x-2}\)
+###
+2025|~|121|~|1|~|0|~|From a bag containing 2 red, 4 yellow and 3 orange balls, what is the probability of not getting orange?|~|\(\tfrac13\)|~|\(\tfrac23\)|~|\(\tfrac59\)|~|\(\tfrac49\)
+###
+2025|~|122|~|0|~|0|~|If \(-4\) and \(8\) are roots of an equation, find the equation.|~|\(x^2 - 4x - 32 = 0\)|~|\(x^2 + 4x + 32 = 0\)|~|\(x^2 + 12x + 32 = 0\)|~|\(x^2 - 12x + 32 = 0\)
+###
+2025|~|123|~|0|~|0|~|\(\dfrac{d}{dx}\ln(x^2 + x) = \)|~|\(\dfrac{2x+1}{x^2+x}\)|~|\(\dfrac{2x-1}{x^2+x}\)|~|\(\dfrac{2x+1}{x^2-x}\)|~|\(\dfrac{2x-1}{x^2-x}\)
+###
+2025|~|124|~|1|~|0|~|\(\displaystyle\int_1^e \ln x\,dx = \)|~|0|~|1|~|\(e - \tfrac1e\)|~|\(e - 1\)
+###
+2025|~|125|~|1|~|0|~|The vectors \(\hat i + \hat j,\ 3a\hat i + \hat k,\ 4\hat i - \hat j + \hat k\) are coplanar. Find \(a\):|~|\(\tfrac23\)|~|\(\tfrac53\)|~|\(\tfrac65\)|~|\(\tfrac72\)
+###
+2025|~|126|~|3|~|0|~|If \(x = 45^\circ\), what is the value of \(2 - \cos 2x - \sin 2x = ?\)|~|\(-1\)|~|0|~|2|~|1
+###
+2025|~|127|~|0|~|0|~|If \(x-3,\ x-1,\ x-4\) are in G.P., find \(x\)|~|\(\tfrac{11}{5}\)|~|\(\tfrac{5}{11}\)|~|\(\tfrac{6}{11}\)|~|\(\tfrac{11}{6}\)
+###
+2025|~|128|~|1|~|0|~|If two unit vectors are perpendicular, their cross product and dot product respectively are:|~|\(0,\ 0\)|~|\(1,\ 0\)|~|\(0,\ 1\)|~|\(1,\ 1\)
+###
+2025|~|129|~|3|~|0|~|Find the sum of roots of \(x^2 - kx + k^2 = 0\)|~|\(k^2\)|~|\(-k\)|~|0|~|\(k\)
+###
+2025|~|130|~|1|~|0|~|If \(y = a\sin^{-1}\left(\dfrac{x}{a}\right)\), then \(\dfrac{dy}{dx} = ?\)|~|\(\dfrac{1}{\sqrt{a^2-x^2}}\)|~|\(\dfrac{a}{\sqrt{a^2-x^2}}\)|~|\(\dfrac{1}{\sqrt{x^2-a^2}}\)|~|\(\dfrac{a}{\sqrt{x^2-a^2}}\)
+###
+2025|~|131|~|2|~|0|~|\(\displaystyle\int_{-3}^{-1} \dfrac{dx}{(x-1)^3} = ?\)|~|\(-\tfrac{3}{31}\)|~|\(-\tfrac{4}{31}\)|~|\(-\tfrac{3}{32}\)|~|\(-\tfrac{4}{32}\)
+###
+2025|~|132|~|3|~|1|~|How many terms of the series \(-8,-6,-4,\ldots\) give a sum of 590? (No integer \(n\) satisfies this; the analogous well-formed problem uses sum 90 giving \(n=15\).)|~|29|~|28|~|30|~|none
+###
+2025|~|133|~|1|~|0|~|If 1 gallon of water is filled in \(g(t) = 100(t-15)^2\) seconds, how many gallons are filled in 5 seconds?|~|0.005 gallons|~|0.0005 gallons|~|0.05 gallons|~|0.5 gallons
+###
+2025|~|134|~|0|~|0|~|If \(\dfrac{2+5i}{1-i} = x - yi\), then \((x,y)\) is:|~|\(\left(-\tfrac32, -\tfrac72\right)\)|~|\(\left(-\tfrac32, \tfrac72\right)\)|~|\(\left(\tfrac32, -\tfrac72\right)\)|~|\(\left(\tfrac32, \tfrac72\right)\)
+###
+2025|~|135|~|1|~|0|~|\(i^3 = ?\)|~|\(-1\)|~|\(-i\)|~|\(i\)|~|1
+###
+2025|~|136|~|0|~|0|~|Product of roots of \(3x^2 - 5x + 2 = 0\) is:|~|\(\tfrac23\)|~|\(-\tfrac32\)|~|\(\tfrac52\)|~|\(-\tfrac52\)
+###
+2025|~|137|~|0|~|0|~|Equation of the straight line passing through \((7,-4)\) and \((8,5)\) is:|~|\(y = 9x - 67\)|~|\(y = 9x + 67\)|~|\(y = -9x + 67\)|~|\(y = -9x - 67\)
+###
+2025|~|138|~|1|~|0|~|\(\displaystyle\int \tan 3x \sec 3x\,dx = ?\)|~|\(\tfrac13 \tan(3x) + C\)|~|\(\tfrac13 \sec(3x) + C\)|~|\(\tan(3x) + C\)|~|\(\sec(3x) + C\)
+###
+2025|~|139|~|2|~|0|~|Find the range of \(y = \cos x\).|~|\((0,1)\)|~|\([-1,0]\)|~|\([-1,1]\)|~|\((-\infty,+\infty)\)
+###
+2025|~|140|~|1|~|0|~|The relative maximum of \(f(x) = x^3 - 9x^2 + 15x + 3\) is:|~|9|~|10|~|15|~|5
+###
+2025|~|141|~|2|~|0|~|In a G.P., 1st term is 7, last term is 448 and sum is 889. Find the common ratio and number of terms.|~|\(r=3,\ n=6\)|~|\(r=2,\ n=6\)|~|\(r=2,\ n=7\)|~|\(r=3,\ n=7\)
+###
+2025|~|142|~|2|~|0|~|Find the total numbers between 256 and 789 that are divisible by 7.|~|74|~|75|~|76|~|77
+###
+2025|~|143|~|1|~|0|~|If eccentricity is \(\tfrac32\) then the conic is:|~|Parabola|~|Hyperbola|~|Ellipse|~|Circle
+###
+2025|~|144|~|3|~|0|~|If \(s = t^2 + 2\), find the velocity at \(t = 3\sqrt2\)|~|\(2\sqrt2\)|~|\(3\sqrt2\)|~|\(5\sqrt2\)|~|\(6\sqrt2\)
+###
+2025|~|145|~|0|~|0|~|For the hyperbola \(9y^2 - 4x^2 = 36\), the distance between the directrices is:|~|\(\dfrac{8}{\sqrt{13}}\)|~|\(\dfrac{16}{\sqrt{15}}\)|~|\(\dfrac{9}{\sqrt2}\)|~|\(\dfrac{16}{\sqrt3}\)
+###
+2025|~|146|~|1|~|0|~|\(\dfrac{\cos^4\theta - \sin^4\theta}{\cos^2\theta - \sin^2\theta} = ?\)|~|0|~|1|~|\(\cos^2\theta - \sin^2\theta\)|~|\(\cos^2 2\theta\)
+###
+2025|~|147|~|1|~|0|~|If a card is drawn at random, the probability of getting a red king is:|~|\(\tfrac{1}{13}\)|~|\(\tfrac{1}{26}\)|~|\(\tfrac14\)|~|\(\tfrac{1}{52}\)
+###
+2025|~|148|~|2|~|0|~|The length of the latus rectum of \(y^2 = 4ax\) is:|~|2|~|\(a\)|~|\(|4a|\)|~|none
+###
+2025|~|149|~|2|~|0|~|If \(\alpha,\beta\) are the roots of \(2x^2 - 4x + 5 = 0\), then \((\alpha+1)(\beta+1) = ?\)|~|\(\tfrac{2}{11}\)|~|\(-\tfrac{2}{11}\)|~|\(\tfrac{11}{2}\)|~|\(-\tfrac{11}{2}\)
+###
+2025|~|150|~|1|~|1|~|If \(y = \sec^{-1} a^3\), then find \(\dfrac{dy}{dx}\) (taken as \(\tfrac{d}{da}\))|~|\(\dfrac{3a^2}{a\sqrt{a^2-1}}\)|~|\(\dfrac{3}{a\sqrt{a^6-1}}\)|~|0|~|none
+###
+2025|~|151|~|2|~|0|~|Solve \(\begin{vmatrix}1&a&b\\1&x&b\\1&c&x\end{vmatrix} = 0\)|~|\(\{a^2, b^2\}\)|~|\(\{a, a^2\}\)|~|\(\{a, b\}\)|~|\(\{b, b^2\}\)
+###
+2025|~|152|~|0|~|0|~|\(\displaystyle\int \dfrac{x^2}{e^{2x^3-3}}\,dx = \)|~|\(-\dfrac{1}{6e^{2x^3-3}} + C\)|~|\(-\dfrac{1}{e^{2x^3-3}} + C\)|~|\(-\tfrac13 e^{-2x^3+3} + C\)|~|\(e^{-2x^3+3} + C\)
+###
+2025|~|153|~|1|~|0|~|The gradient of the curve \(x^3 + y^3 + 3x - 6y + 9 = 0\) at \((1,2)\) is|~|0|~|\(-1\)|~|4|~|2
+###
+2025|~|154|~|3|~|0|~|\((\sin x + \cos x)^2\) is the same as|~|\(\sin^2 x + \cos^2 x\)|~|\(1 + 2\sin x \cos x\)|~|\(1 + \sin 2x\)|~|both b and c
+###
+2025|~|155|~|1|~|0|~|If the discriminant is \(-4\) then the nature of roots is:|~|rational|~|complex|~|real and equal|~|real and different
+###
+2025|~|156|~|0|~|0|~|\(\dfrac{d}{dx}(\cos^{-1} 2x) = \)|~|\(-\dfrac{2}{\sqrt{1-4x^2}}\)|~|\(\dfrac{1}{\sqrt{1-2x^2}}\)|~|\(-\dfrac{1}{\sqrt{1-4x^2}}\)|~|\(\dfrac{2}{\sqrt{1-2x^2}}\)
+###
+2025|~|157|~|2|~|0|~|If \(x = 45^\circ\), then \(2 - \cos 2x - \sin 2x = \)|~|\(-1\)|~|0|~|1|~|none
+###
+2025|~|158|~|0|~|0|~|\(\displaystyle\int e^{\tan x} \sec^2 x\,dx = \)|~|\(e^{\tan x} + C\)|~|\(e^{\sec^2 x} + C\)|~|\(e^{\sec x} + C\)|~|\(e^{\tan^2 x} + C\)
+###
+2025|~|159|~|2|~|0|~|If \(\sin x = \tfrac34\) and \(x\) is in the first quadrant, then \(\cos x\) is|~|\(\dfrac{\sqrt7}{3}\)|~|\(\dfrac43\)|~|\(\dfrac{\sqrt7}{4}\)|~|none
+###
+2025|~|160|~|1|~|0|~|The solution of \(3x + 4 > 11\) and \(4x - 3 < 13\) is:|~|\(\tfrac73 < x < \tfrac83\)|~|\(\tfrac73 < x < 4\)|~|\(3 < x < 4\)|~|\(1 < x < 2\)
+###
+2025|~|161|~|0|~|0|~|If \(\cos 3x = \tfrac12\) then \(x\) is equal to:|~|\(\tfrac13 \cos^{-1}\tfrac12\)|~|\(\cos^{-1}\tfrac{\sqrt3}{2}\)|~|\(\cos^{-1}\tfrac16\)|~|\(60^\circ\)
+###
+2025|~|162|~|0|~|0|~|If the side of a square is 3 cm, what is the rate of change of its area if the side decreases at 2 cm/second?|~|\(-12\)|~|24|~|\(-36\)|~|none
+###
+2025|~|163|~|1|~|0|~|The equation \(\sqrt{x+1} + \sqrt{x-1} = \sqrt{x^2 + x + 1}\) is:|~|Exponential|~|Radical|~|Linear|~|quadratic
+###
+2025|~|164|~|0|~|0|~|Find \(s\) when \(a=2,\ b=3,\ c=5\)|~|5|~|10|~|12|~|15
+###
+2025|~|165|~|0|~|0|~|If \(A\) is a square matrix and \(A^t = -A\), then \(A\) is:|~|Skew symmetric|~|Symmetric|~|Idempotent|~|Hermitian
+###
+2025|~|166|~|2|~|0|~|The cross product of \(\vec A = a\hat i\) and \(\vec B = b\hat j\) is:|~|\(-ab\hat i\)|~|\(-ab\hat k\)|~|\(ab\hat k\)|~|\(ab\hat j\)
+###
+2025|~|167|~|2|~|0|~|\((\cos\theta + i\sin\theta)^n = \)|~|\(n\cos\theta + i\sin\theta\)|~|\(\cos n\theta + i\sin\theta\)|~|\(\cos n\theta + i\sin n\theta\)|~|\(\cos\theta + i\sin n\theta\)
+###
+2025|~|168|~|0|~|0|~|The condition for the discriminant to be imaginary:|~|\(b^2 - 4ac < 0\)|~|\(b^2 - 4ac > 0\)|~|\(b^2 - 4ac = 0\)|~|\(b^2 = -4ac\)
+###
+2025|~|169|~|3|~|0|~|The distance between \((7,1)\) and \((3,y)\) is 5 units. The value of \(y\) is:|~|\(-4\)|~|\(-2\)|~|4|~|Both A and B
+###
+2025|~|170|~|0|~|0|~|The integral \(3\displaystyle\int_0^1 \dfrac{1}{\sqrt{1-x^2}}\,dx\) is equal to|~|\(\dfrac{3\pi}{2}\)|~|\(\dfrac{\pi}{4}\)|~|\(\dfrac{\pi}{2}\)|~|2
+###
+2025|~|171|~|0|~|0|~|\(\dfrac{d}{dx}\{e^{\sin x} \cos x\} = \)|~|\(e^{\sin x}(-\sin x + \cos^2 x)\)|~|\(e^{\sin x}(-\cos x + \cos^2 x)\)|~|\(e^{\sin x}(\sin^2 x - \sin x)\)|~|none
+###
+2025|~|172|~|2|~|0|~|\((x+3)^3 - 3(x+3)^2 + 3(x+3) - 1 = \)|~|\((x+1)^3\)|~|\((x+3)^3\)|~|\((x+2)^3\)|~|None
+###
+2025|~|173|~|0|~|0|~|In \(\triangle ABC\), \(\alpha=72^\circ,\ \beta=48^\circ,\ c=9\) cm. The lengths of \(a\) and \(b\) are:|~|\(a=9.88,\ b=7.7\)|~|\(a=8.99,\ b=6.85\)|~|\(a=10.32,\ b=8.23\)|~|\(a=11.35,\ b=6.82\)
+###
+2025|~|174|~|3|~|0|~|\(\displaystyle\int (e^x + x)\,dx = \)|~|\(e^x + x^2 + C\)|~|\(e^x + 1 + C\)|~|\(e^x + x + C\)|~|\(e^x + \dfrac{x^2}{2} + C\)
+###
+2025|~|175|~|0|~|0|~|Find the vertices of the hyperbola \(-9x^2 + 16y^2 - 72x + 96y - 144 = 0\)|~|\((-4,0)\) and \((-4,-6)\)|~|\((2,-4)\) and \((3,6)\)|~|\((3,4)\) and \((4,3)\)|~|\((0,-4)\) and \((0,-6)\)
+###
+2025|~|176|~|0|~|1|~|For the hyperbola \(4x^2 - 3y^2 = 12\), find \(x = \pm\tfrac{a}{e}\) (directrix x-coordinates).|~|\(x = \pm\dfrac{3}{\sqrt7}\)|~|\(y = \pm\dfrac{3}{\sqrt7}\)|~|\(x = \pm\dfrac{\sqrt7}{3}\)|~|\(y = \pm\dfrac{\sqrt7}{3}\)
+###
+2025|~|177|~|0|~|0|~|The area of the parallelogram whose sides are \(\vec A = \hat k\) and \(\vec B = \hat j + \hat k\)|~|1|~|2|~|\(\tfrac12\)|~|\(\tfrac32\)
+###
+2025|~|178|~|1|~|0|~|Projection of \(\vec A = 2\hat i + \hat j\) onto the vector \(\vec B = \hat i - \hat j + \hat k\) is|~|\(\dfrac12\)|~|\(\dfrac{1}{\sqrt3}\)|~|\(\dfrac{1}{\sqrt5}\)|~|\(\dfrac14\)
+###
+2025|~|179|~|0|~|0|~|Middle term required to make \(x^2 + \dfrac{16}{25}\) a perfect square:|~|\(\pm\dfrac85 x\)|~|\(\pm\dfrac53 x\)|~|\(\pm\dfrac15 x\)|~|\(\pm\dfrac{16}{5} x\)
+###
+2025|~|180|~|0|~|0|~|The sum \(1 + \dfrac13 + \dfrac19 + \dfrac{1}{27} + \cdots\infty\) is|~|\(\dfrac32\)|~|\(\dfrac34\)|~|\(\dfrac23\)|~|\(\dfrac29\)
+###
+2025|~|181|~|3|~|0|~|Find the equation of the line parallel to \(x = -2\) and passing through \((0,4)\).|~|\(y = 4\)|~|\(x = -2\)|~|\(y = 2\)|~|\(x = 0\)
+###
+2025|~|182|~|0|~|0|~|If \(S_1 = t^3 + t^2 + 5\) and \(S_2 = t^5 + 2t + 3\) then the difference between velocities after 2 seconds is:|~|\(-66\)|~|\(-54\)|~|33|~|21
+###
+2025|~|183|~|2|~|0|~|The vectors \(\vec A = 2\hat i + a\hat j + \hat k\) and \(\vec B = -3\hat j + 2\hat k\) are perpendicular. The value of \(a\) is:|~|\(-\tfrac14\)|~|\(-\tfrac45\)|~|\(\tfrac23\)|~|\(\tfrac47\)
+###
+2025|~|184|~|1|~|0|~|If \(f(x) = x^x\) then \(f'(x)\) is equal to:|~|\(x\ln x(\ln x + 1)\)|~|\(x^x(\ln x + 1)\)|~|\(x^x(\ln x - 1)\)|~|None of these
+###
+2025|~|185|~|0|~|0|~|\(16x^2 + 9y^2 = 144\) is an ellipse. Find the length of the minor axis and the foci respectively.|~|\(6,\ (0,\pm\sqrt7)\)|~|\(4,\ (0,\pm\sqrt2)\)|~|\(3,\ (\pm\sqrt2,0)\)|~|\(2,\ (\pm\sqrt7,0)\)
+###
+2025|~|186|~|3|~|1|~|The force \(\vec F = 3\hat i + 2\hat j - 4\hat k\) is applied at \((1,-1,0)\). Find the moment of \(\vec F\) about \((2,1,-3)\). (Computed moment is \(2\hat i + 5\hat j + 4\hat k\), not listed.)|~|\(-2\hat i - 5\hat j - 4\hat k\)|~|\(3\hat i - 2\hat j - \hat k\)|~|\(-\hat i + \hat j + \hat k\)|~|none
+###
+2025|~|187|~|1|~|0|~|The eccentricity of a parabola is:|~|0|~|1|~|\(\tfrac12\)|~|\(\sqrt2\)
+###
+2025|~|188|~|1|~|0|~|Middle term in the expansion of \(\left(b - \dfrac{x}{3}\right)^6\) is:|~|\(-5b^2 x^4\)|~|\(-\dfrac{20}{27} b^3 x^3\)|~|\(2x b^5\)|~|\(\dfrac{2}{81} bx^5\)
+###
+2025|~|190|~|2|~|0|~|An insect completes one rotation (circular path) in 12 seconds. How many degrees does it turn in 2 seconds?|~|\(30^\circ\)|~|\(45^\circ\)|~|\(60^\circ\)|~|\(90^\circ\)
+###
+2025|~|191|~|2|~|0|~|The integral \(\displaystyle\int_0^{\pi/2} \sin^3 x \cos x\,dx = \)|~|1|~|\(\tfrac12\)|~|\(\tfrac14\)|~|\(\tfrac{3}{16}\pi\)
+###
+2023|~|1|~|2|~|0|~|\(\sin\theta + \sin(-\theta) + \cos\theta + \cos(-\theta) + \tan\theta + \tan(-\theta) = ?\)|~|\(\sin\theta\)|~|\(\cos\theta\)|~|\(2\cos\theta\)|~|\(\tan\theta\)
+###
+2023|~|2|~|0|~|0|~|If \(P(A)=\tfrac12,\ P(B)=\tfrac14,\ P(A\cap B)=\tfrac18\), then \(P(A\cup B) = ?\)|~|\(\tfrac58\)|~|\(\tfrac78\)|~|\(\tfrac38\)|~|\(\tfrac85\)
+###
+2023|~|3|~|0|~|0|~|\(x^2 = -4y\), then the equation of the directrix and axis of the parabola is|~|\(y=1,\ x=0\)|~|\(y=-1,\ x=0\)|~|\(y=0,\ x=1\)|~|None
+###
+2023|~|4|~|1|~|0|~|\(0!\) and \(1!\) are|~|0|~|1|~|2|~|\(\pm1\)
+###
+2023|~|5|~|2|~|0|~|If one row of any square matrix is zero, then the determinant of the matrix will be|~|1|~|\(-1\)|~|0|~|None
+###
+2023|~|6|~|1|~|0|~|\(\displaystyle\int_0^{\pi/2} \sin^3 x \cos x\,dx\)|~|\(\tfrac13\)|~|\(\tfrac14\)|~|\(\tfrac15\)|~|\(-\tfrac14\)
+###
+2023|~|7|~|2|~|0|~|The term independent of \(x\) in the expansion \(\left(x^2 - \dfrac{2}{x^2}\right)^{12}\)|~|\(-8064\)|~|\(-59136\)|~|\(59136\)|~|\(8064\)
+###
+2023|~|8|~|2|~|0|~|If the discriminant of a quadratic equation is \(-4\), the roots of the equation are|~|Real|~|Equal|~|Complex|~|None
+###
+2023|~|9|~|1|~|0|~|\(\displaystyle\int \dfrac{e^{1/u}}{u^2}\,du\)|~|\(e^{1/u} + e\)|~|\(-e^{1/u} + c\)|~|\(\dfrac{e^{1/u}}{2} + c\)|~|None
+###
+2023|~|10|~|0|~|0|~|\(\dfrac{2+5i}{1-i} = x - yi\), then the value of \(x - yi\)|~|\(\dfrac{-3+7i}{2}\)|~|\(\dfrac{-3-7i}{2}\)|~|\(\dfrac{3+7i}{2}\)|~|None
+###
+2023|~|11|~|0|~|0|~|\(\displaystyle\lim_{x\to0^+} x^x = ?\)|~|1|~|\(-1\)|~|0|~|not defined
+###
+2023|~|12|~|0|~|0|~|Equation of an ellipse with centre at origin, minor axis along the x-axis, length of major axis 10 and distance between foci 8|~|\(\dfrac{x^2}{9} + \dfrac{y^2}{25} = 1\)|~|\(\dfrac{x^2}{9} + \dfrac{y^2}{16} = 1\)|~|\(\dfrac{x^2}{25} + \dfrac{y^2}{9} = 1\)|~|None
+###
+2023|~|13|~|0|~|0|~|\(2^3\,2^2 = 2^k\) then \(k\) is|~|5|~|4|~|3|~|2
+###
+2023|~|14|~|1|~|0|~|\(\displaystyle\int \dfrac{2x\,dx}{1+x^2}\)|~|\((1+x^2) + c\)|~|\(\ln(1+x^2) + c\)|~|\(\ln 2x + c\)|~|\(-\ln(1+x^2) + c\)
+###
+2023|~|15|~|1|~|0|~|\(\omega^{32} = ?\)|~|\(\omega\)|~|\(\omega^2\)|~|1|~|0
+###
+2023|~|16|~|1|~|0|~|\(\sqrt{y} - e^x = 2\) then \(\dfrac{dy}{dx} = ?\)|~|\(\dfrac{e^x}{2\sqrt y}\)|~|\(e^x 2\sqrt y\)|~|\(\dfrac{e^x}{2}\)|~|None
+###
+2023|~|17|~|1|~|0|~|\(x^2 + y^2 - 4x - 6y + 9 = 0\) then centre is|~|\((2,-3)\)|~|\((2,3)\)|~|\((-2,-3)\)|~|\((3,2)\)
+###
+2023|~|18|~|0|~|0|~|If \(A^{k+1} = A\) and \(k\) is a positive integer then it is ____ matrix.|~|Periodic|~|Null|~|Idempotent|~|None
+###
+2023|~|19|~|1|~|0|~|\(\displaystyle\int x^5 e^{7-4x^6}\,dx\)|~|\(e^{7-4x^6} + c\)|~|\(-\tfrac{1}{24} e^{7-4x^6} + c\)|~|\(-\tfrac14 e^{7-4x^6} + c\)|~|None
+###
+2023|~|20|~|1|~|0|~|\(\sin\theta + \cos\theta \cot\theta = ?\)|~|\(\sin\theta\)|~|\(\mathrm{cosec}\,\theta\)|~|\(\sec\theta\)|~|\(\tan\theta\)
+###
+2023|~|21|~|1|~|0|~|\(\displaystyle\lim_{x\to\pi/2} \dfrac{\cos x}{x^2} = ?\)|~|\(\dfrac{\pi}{2}\)|~|0|~|1|~|\(-1\)
+###
+2023|~|22|~|0|~|0|~|Solve for \(x\): \(\begin{vmatrix}1&a&b\\1&x&b\\1&c&x\end{vmatrix} = 0\)|~|\((a,b)\)|~|\((a^2,a)\)|~|\((a^2,b^2)\)|~|\((b,b^2)\)
+###
+2023|~|23|~|1|~|0|~|Partial fraction of \(\dfrac{1}{x^3 - x}\) is|~|\(\dfrac{A}{x} + \dfrac{B}{x^2-1}\)|~|\(\dfrac{A}{x} + \dfrac{B}{x-1} + \dfrac{C}{x+1}\)|~|\(\dfrac{A}{x} - \dfrac{B}{x-1}\)|~|\(\dfrac{A}{x} + \dfrac{B}{x-1} - \dfrac{C}{x+1}\)
+###
+2023|~|24|~|1|~|0|~|\(\left(2 + \dfrac{x}{2}\right)^9\) then the coefficient of the sixth term is|~|64|~|63|~|62|~|65
+###
+2023|~|25|~|2|~|0|~|How many numbers are there between 256 and 789 that are divisible by 7?|~|74|~|75|~|76|~|78
+###
+2023|~|26|~|0|~|0|~|\(\dfrac{a^{-1} + b^{-1}}{a^{-1}} = ?\)|~|\(\dfrac{a+b}{b}\)|~|\(\dfrac{a+b}{b}\)|~|\(a+b\)|~|\(\dfrac{a}{a-b}\)
+###
+2023|~|27|~|3|~|0|~|If a polynomial \(x^3 + ax^2 - a^2 x - a^3\) is divided by \(x+a\) then the remainder is|~|\(a^2\)|~|\(a^3\)|~|\(a\)|~|0
+###
+2023|~|28|~|3|~|0|~|\(i^3 = ?\)|~|1|~|\(-1\)|~|\(i\)|~|\(-i\)
+###
+2023|~|29|~|0|~|0|~|Eccentricity of circle is|~|0|~|1|~|1.5|~|0.5
+###
+2023|~|30|~|2|~|0|~|\(\sin\theta + \sin(-\theta) + \cos\theta + \cos(-\theta) + \tan\theta + \tan(-\theta) = ?\)|~|\(\sin\theta\)|~|\(\cos\theta\)|~|\(2\cos\theta\)|~|\(\tan\theta\)
+###
+2023|~|31|~|0|~|0|~|\(\sqrt{\dfrac{1+\cos\theta}{1-\cos\theta}} = \dfrac{x}{y}\) then \(\tan\theta = ?\)|~|\(\dfrac{2xy}{x^2-y^2}\)|~|\(\dfrac{x^2-y^2}{2xy}\)|~|\(\dfrac{2xy}{x^2+y^2}\)|~|None
+###
+2023|~|32|~|2|~|0|~|\(\dfrac{d}{dx}\left[\dfrac{f(x)}{g(x)}\right] = ?\)|~|\(\dfrac{f(x)g'(x) + g(x)f'(x)}{[g(x)]^2}\)|~|\(\dfrac{f(x)g'(x) - g(x)f'(x)}{[g(x)]^2}\)|~|\(\dfrac{g(x)f'(x) - f(x)g'(x)}{[g(x)]^2}\)|~|\(f(x)g'(x) + g(x)f'(x)\)
+###
+2023|~|33|~|0|~|0|~|For any matrix \(A^t = A\) (if \(A\) is a square matrix) then the matrix is said to be|~|Symmetric|~|Skew Symmetric|~|Null|~|Diagonal
+###
+2023|~|34|~|0|~|0|~|If \(\dfrac{\sin^2 x}{\cos^2 x} = 1\) then the value of \(\tan x = ?\)|~|\(\pm1\)|~|\(-1\)|~|0|~|\(-3\)
+###
+2023|~|35|~|0|~|0|~|If \(P(A)=\tfrac12,\ P(B)=\tfrac14,\ P(A\cap B)=\tfrac18\), then \(P(A\cup B) = ?\)|~|\(\tfrac58\)|~|\(\tfrac78\)|~|\(\tfrac38\)|~|\(\tfrac85\)
+###
+2023|~|36|~|1|~|0|~|\(\displaystyle\int x \cot x^2\,dx\)|~|\(\ln\sin x^2 + c\)|~|\(\tfrac12 \ln(\sin x^2) + c\)|~|\(2\ln(\sin x^2) + c\)|~|None
+###
+2023|~|37|~|1|~|0|~|How many terms of the series \(-8, -6, -4, \ldots\) will make the sum 90?|~|14|~|15|~|16|~|17
+###
+2023|~|38|~|0|~|0|~|The first three terms of a G.P. are \(x+10,\ x-2,\ x-10\) respectively. The value of \(x\) and the sum to infinity is|~|26, 108|~|26, 106|~|26, 110|~|26, 105
+###
+2023|~|39|~|0|~|0|~|\(y^2 - 6y - 8x - 23 = 0\), then the vertex of the given equation is|~|\((-4,3)\)|~|\((4,3)\)|~|\((-4,-3)\)|~|\((4,-3)\)
+###
+2023|~|40|~|0|~|0|~|\(x^2 = -4y\), then the equation of the directrix and axis of the parabola is|~|\(y=1,\ x=0\)|~|\(y=-1,\ x=0\)|~|\(y=0,\ x=1\)|~|None
+###
+2023|~|41|~|1|~|0|~|Two dice are tossed together; the probability of getting the same face|~|\(\tfrac15\)|~|\(\tfrac16\)|~|\(\tfrac56\)|~|\(\tfrac76\)
+###
+2023|~|42|~|0|~|0|~|When a vector is divided by its magnitude then the vector is said to be|~|Unit Vector|~|Position Vector|~|Null Vector|~|Free Vector
+###
+2023|~|43|~|0|~|0|~|\(A + (B + C) = (A + B) + C\) then this property is said to be|~|Associative|~|Commutative|~|Distributive|~|None
+###
+2023|~|44|~|0|~|0|~|The product of the arithmetic mean and harmonic mean is|~|\(G^2\)|~|\(A^2\)|~|\(H^2\)|~|\(GH\)
+###
+2023|~|45|~|1|~|0|~|\(0!\) and \(1!\) are|~|0|~|1|~|2|~|\(\pm1\)
+###
+2023|~|46|~|1|~|0|~|\(\dfrac{d}{dx} a^x = ?\)|~|\(\dfrac{a^x}{\ln a}\)|~|\(a^x \ln a\)|~|\(a^x\)|~|\(a^{x-1}\)
+###
+2023|~|47|~|2|~|0|~|If \(16^x = 4\) and \(5^{x+y} = 625\) then \(y = ?\)|~|\(\tfrac52\)|~|\(\tfrac12\)|~|\(\tfrac72\)|~|\(\tfrac92\)
+###
+2023|~|48|~|0|~|0|~|If \(A^2 = A\) then matrix \(A\) is said to be|~|Idempotent|~|Null|~|Symmetric|~|Diagonal
+###
+2023|~|49|~|3|~|0|~|\(\dfrac{\cos^4\theta - \sin^4\theta}{\cos^2\theta - \sin^2\theta} = ?\)|~|\(\cos^2\theta\)|~|\(\sin^2\theta\)|~|\(\tan^2\theta\)|~|1
+###
+2023|~|50|~|2|~|0|~|If one row of any square matrix is zero then the determinant of the matrix will be|~|1|~|\(-1\)|~|0|~|None
+###
+2023|~|51|~|0|~|0|~|\(\displaystyle\int e^x(x^2 + 2x)\,dx = ?\)|~|\(e^x x^2 + c\)|~|\(e^x 2x + c\)|~|\(e^x x^2 + 2x + c\)|~|None
+###
+2023|~|52|~|1|~|0|~|\(\dfrac{d}{dx}(\tan^{-1} x)^2 = ?\)|~|\(2\tan^{-1} x\)|~|\(\dfrac{2\tan^{-1} x}{1+x^2}\)|~|\(\dfrac{-2\tan^{-1} x}{1+x^2}\)|~|\(\dfrac{1+x^2}{2\tan^{-1} x}\)
+###
+2023|~|53|~|2|~|0|~|If the equation \(ax^2 + bx + c = 0\) has complex roots then|~|\(b^2 - 4ac = 0\)|~|\(b^2 - 4ac > 0\)|~|\(b^2 - 4ac < 0\)|~|\(b^2 - 4ac \ge 0\)
+###
+2023|~|54|~|1|~|0|~|If \(\alpha,\beta\) are the roots of \(2x^2 - 5x + 4 = 0\) then \((\alpha+1)(\beta+1) = ?\)|~|\(\tfrac72\)|~|\(\tfrac{11}{2}\)|~|\(-\tfrac{11}{2}\)|~|\(\tfrac{2}{11}\)
+###
+2023|~|55|~|1|~|0|~|\(\displaystyle\int_0^{\pi/2} \sin^3 x \cos x\,dx\)|~|\(\tfrac13\)|~|\(\tfrac14\)|~|\(\tfrac15\)|~|\(-\tfrac14\)
+###
+2023|~|56|~|3|~|1|~|\(\dfrac{d}{dx} e^{\sin x} \cos x\) (derivative equals \(e^{\sin x}(\cos^2 x - \sin x)\), not among the listed options)|~|\(e^{\sin x}(\cos x + \sin x)\)|~|\(e^{\sin x}(\cos x - \sin x)\)|~|\(e^{\sin x}(-\cos x - \sin x)\)|~|None
+###
+2023|~|57|~|1|~|0|~|If \(A = \begin{bmatrix}1&0&0\\1&\omega&0\\1&1&\omega^2\end{bmatrix}\) then \(|A| = ?\)|~|\(-1\)|~|1|~|0|~|\(-1\)
+###
+2023|~|58|~|1|~|0|~|\(\displaystyle\lim_{x\to0} \dfrac{\tan x}{x} = ?\)|~|\(\infty\)|~|1|~|0|~|\(-1\)
+###
+2023|~|59|~|1|~|0|~|If \(P(A)=\tfrac13,\ P(B)=\tfrac13,\ P(A\cap B)=\tfrac19\) then \((A\cup B)' = ?\)|~|\(\tfrac59\)|~|\(\tfrac49\)|~|\(\tfrac19\)|~|\(-\tfrac79\)
+###
+2023|~|60|~|2|~|0|~|The term independent of \(x\) in the expression \(\left(x^2 - \dfrac{2}{x^2}\right)^{12}\)|~|\(-8064\)|~|\(-59136\)|~|\(59136\)|~|\(8064\)
+###
+2023|~|61|~|2|~|0|~|\(3x^2 + y^2 - 6x = 0\) then the slope is|~|\(\dfrac{6x}{2y}\)|~|\(\dfrac{6x-6}{2y}\)|~|\(-\left(\dfrac{6x-6}{2y}\right)\)|~|None
+###
+2023|~|62|~|1|~|0|~|\(\dfrac{d}{dx}\ln(\sin x) = ?\)|~|\(\tan x\)|~|\(\cot x\)|~|\(-\tan x\)|~|\(-\cot x\)
+###
+2023|~|63|~|1|~|0|~|\(\dfrac{d}{dx}\ln(1+x^2) = ?\)|~|\(\dfrac{1+x^2}{2x}\)|~|\(\dfrac{2x}{1+x^2}\)|~|\(\dfrac{-1+x^2}{2x}\)|~|\(\dfrac{-1-x^2}{2x}\)
+###
+2023|~|64|~|2|~|0|~|\(\displaystyle\lim_{x\to\infty} \dfrac{x^3}{x^2+x+1} = ?\)|~|1|~|0|~|\(\infty\)|~|\(-1\)
+###
+2023|~|65|~|2|~|0|~|If the discriminant of a quadratic equation is \(-4\) the roots of the equation are|~|Real|~|Equal|~|Complex|~|None
+###
+2023|~|66|~|1|~|0|~|\(\dfrac{d}{dx}\left(\sqrt{x} + \dfrac{1}{\sqrt{x}}\right)^2 = ?\)|~|\(1 + \dfrac{1}{x^2}\)|~|\(1 - \dfrac{1}{x^2}\)|~|\(1 + x^2\)|~|\(1 + \dfrac1x\)
+###
+2023|~|67|~|3|~|1|~|If \(f(x) = x^7 - 99x^6 + 99x^4 - 2x + 190\) then \(f(99) = ?\) (corrupted polynomial; clean telescoping form gives \(-8\), which is not listed)|~|10|~|4|~|\(-2\)|~|None
+###
+2023|~|68|~|1|~|0|~|\(\displaystyle\int_0^{\pi/2} \cos^4 x\,dx\)|~|\(\dfrac{\pi}{2}\)|~|\(\dfrac{3\pi}{16}\)|~|\(\dfrac{3\pi}{4}\)|~|\(\dfrac{7\pi}{8}\)
+###
+2023|~|69|~|1|~|0|~|\(\displaystyle\int \dfrac{e^{1/u}}{u^2}\,du + c\)|~|\(e^{1/u} + c\)|~|\(-e^{1/u} + c\)|~|\(\dfrac{e^{1/u}}{2} + c\)|~|None
+###
+2023|~|70|~|1|~|0|~|\(\displaystyle\lim_{x\to\infty} \dfrac{x^2 - 2x + 3}{5x^2 + 7x + 4} = ?\)|~|\(-\dfrac15\)|~|\(\dfrac15\)|~|0|~|\(\infty\)
+###
+2023|~|71|~|0|~|0|~|\(\dfrac{d}{dx}\, a\sin^{-1}\left(\dfrac{x}{a}\right) = ?\)|~|\(\dfrac{a}{\sqrt{a^2-x^2}}\)|~|\(\dfrac{-a}{\sqrt{a^2-x^2}}\)|~|\(\dfrac{1}{\sqrt{a^2-x^2}}\)|~|\(\dfrac{-1}{\sqrt{1-x^2}}\)
+###
+2023|~|72|~|2|~|0|~|\(\displaystyle\int \dfrac{x^2\,dx}{e^{2x^3+3}}\)|~|\(\tfrac16 e^{2x^3+3} + c\)|~|\(\tfrac16 e^{-2x^3-3} + c\)|~|\(-\tfrac16 \dfrac{1}{e^{2x^3+3}} + c\)|~|\(\dfrac{1}{6e^{2x^3+3}} + c\)
+###
+2023|~|73|~|1|~|0|~|Eccentricity of a parabola is|~|0|~|1|~|1.5|~|0.5
+###
+2023|~|74|~|0|~|0|~|\(\dfrac{2+5i}{1-i} = x - yi\) then the value of \(x - yi\)|~|\(\dfrac{-3+7i}{2}\)|~|\(\dfrac{-3-7i}{2}\)|~|\(\dfrac{3+7i}{2}\)|~|None
+###
+2023|~|75|~|2|~|0|~|If eccentricity is \(\tfrac32\) then the conic is|~|Circle|~|Parabola|~|Hyperbola|~|Ellipse
+###
+2023|~|76|~|1|~|0|~|Pythagoras theorem relates to which law?|~|Law of sine|~|Law of cosine|~|Law of tangent|~|None
+###
+2023|~|77|~|3|~|1|~|\(\displaystyle\int_0^{\pi/2} \cos^4 x\,dx = ?\) (correct value \(\tfrac{3\pi}{16}\), not among options)|~|\(\dfrac{\pi}{2}\)|~|0|~|\(-1\)|~|None
+###
+2023|~|78|~|1|~|0|~|\(\displaystyle\int a^{4x}\,dx = ?\)|~|\(\dfrac{a^{4x}}{\ln a} + c\)|~|\(\dfrac{a^{4x}}{4\ln a} + c\)|~|\(\dfrac{-a^{4x}}{\ln a} + c\)|~|\(a^{4x} + c\)
+###
+2023|~|79|~|0|~|0|~|\(\displaystyle\lim_{x\to0} x^x = ?\)|~|1|~|\(-1\)|~|0|~|Not defined
+###
+2023|~|80|~|0|~|0|~|\(y = x^{\cos x}\) then \(y' = ?\)|~|\(\left(\dfrac{\cos x}{x} - \ln x \sin x\right) x^{\cos x}\)|~|\(\left(\dfrac{\cos x}{x} - \ln x \sin x\right)\)|~|\(\left(\dfrac{\cos x}{x} + \ln x \sin x\right)\)|~|\(\left(\dfrac{\cos x}{x} + \dfrac{\ln\sin x}{\sin x}\right) x^{\cos x}\)
+###
+2023|~|81|~|1|~|0|~|\(f(x) = \tan^{-1} x \sin x\), then \(f'(x) = ?\)|~|\(\dfrac{1}{1+x^2}\cos x\)|~|\(\tan^{-1} x \cos x + \dfrac{\sin x}{1+x^2}\)|~|\(\tan^{-1} x \cos x - \dfrac{\sin x}{1+x^2}\)|~|None
+###
+2023|~|82|~|1|~|0|~|\(\dfrac{1}{1-\sin\theta} - \dfrac{1}{1+\sin\theta} = ?\)|~|\(2\tan\theta\)|~|\(2\tan\theta\sec\theta\)|~|\(2\tan\theta\cos\theta\)|~|\(2\sec\theta\)
+###
+2023|~|83|~|1|~|0|~|\(y = \dfrac{e^x - 1}{e^x + 1}\), then \(\dfrac{dy}{dx} = ?\)|~|\(\dfrac{e^x - 1}{(e^x+1)^2}\)|~|\(\dfrac{2e^x}{(e^x+1)^2}\)|~|\(\dfrac{(e^x+1)(e^x)}{(e^x+1)^2}\)|~|\(\dfrac{-2e^x}{(e^x+1)^2}\)
+###
+2023|~|84|~|0|~|0|~|Equation of an ellipse with centre at origin, minor axis along the x-axis, length of major axis 10 and distance between foci 8|~|\(\dfrac{x^2}{9} + \dfrac{y^2}{25} = 1\)|~|\(\dfrac{x^2}{9} + \dfrac{y^2}{16} = 1\)|~|\(\dfrac{x^2}{25} + \dfrac{y^2}{9} = 1\)|~|None
+###
+2023|~|85|~|0|~|0|~|Eccentricity of \(16x^2 + 9y^2 - 64x - 54y + 1 = 0\)|~|\(\dfrac{\sqrt7}{4}\)|~|\(\dfrac12\)|~|\(\dfrac23\)|~|0.7
+###
+2023|~|86|~|0|~|0|~|Equation of circle passing through \((3,0)\) and \((0,3)\) and touching both axes|~|\(x^2 + y^2 - 6x - 6y + 9 = 0\)|~|\(x^2 + y^2 - 6x - 6y = 0\)|~|\(x^2 + y^2 - 6x + 6y = 0\)|~|none
+###
+2023|~|87|~|3|~|1|~|If \(2x-3,\ x,\ x-2\) is a series in G.P. then the sum to infinity is (valid \(x=6\) gives sum \(27\), not listed)|~|20.1|~|20|~|39.1|~|None
+###
+2023|~|88|~|2|~|0|~|\((\cos\theta + i\sin\theta)^n\) then the correct statement for de Moivre's theorem|~|\(\cos\theta + i\sin n\theta\)|~|\(\cos\theta + i\sin\theta\)|~|\(\cos n\theta + i\sin n\theta\)|~|\(\cos\theta - i\sin\theta\)
+###
+2023|~|89|~|0|~|0|~|\(2^3\,2^2 = 2^k\) then \(k\) is|~|5|~|4|~|3|~|2
+###
+2023|~|90|~|1|~|1|~|If \(2^a = 2^5\) (so \(a=5\)) and \(x = 2a\), the value of \(x\) is|~|\(-10\)|~|10|~|20|~|\(-20\)
+###
+2023|~|91|~|1|~|0|~|\(\cos 10^\circ \cos 20^\circ - \sin 10^\circ \sin 20^\circ = ?\)|~|\(\dfrac12\)|~|\(\dfrac{\sqrt3}{2}\)|~|\(\sqrt3\)|~|\(\dfrac{1}{\sqrt3}\)
+###
+2023|~|92|~|1|~|0|~|\(\displaystyle\lim_{x\to a} \dfrac{x^n - a^n}{x-a} = ?\)|~|\(n x^{n-1}\)|~|\(n a^{n-1}\)|~|\(na\)|~|\(na\)
+###
+2023|~|93|~|1|~|0|~|\(y = e^{x^2}\), then \(\dfrac{dy}{dx} = ?\)|~|\(e^{x^2}\)|~|\(e^{x^2} 2x\)|~|\(e^{x^2} 2e\)|~|None
+###
+2023|~|94|~|1|~|0|~|\(\displaystyle\int \dfrac{2x\,dx}{1+x^2}\)|~|\((1+x^2) + c\)|~|\(\ln(1+x^2) + c\)|~|\(\ln 2x + c\)|~|\(-\ln(1+x^2) + c\)
+###
+2023|~|95|~|1|~|0|~|\(\displaystyle\int_1^e \ln x\,dx\)|~|0|~|1|~|\(-1\)|~|2
+###
+2023|~|96|~|1|~|1|~|\(f(x) = \sin x^3\) then \(f'(x)\) is (option b should read \(3x^2\cos x^3\))|~|\(\cos x^3\)|~|\(3x^2 \cos x^2\)|~|\(-3x^2 \cos x^3\)|~|None
+###
+2023|~|97|~|0|~|0|~|\((1 + \omega + \omega^2)^2\) where \(\omega\) is the complex cube root of unity|~|0|~|1|~|\(-1\)|~|\(\omega\)
+###
+2023|~|98|~|1|~|0|~|\(\displaystyle\int \dfrac{dx}{a^2 + x^2} = ?\)|~|\(\tan^{-1} x + c\)|~|\(\dfrac1a \tan^{-1}\left(\dfrac{x}{a}\right) + c\)|~|\(\tan^{-1}\left(\dfrac{x}{a}\right) + c\)|~|None
+###
+2023|~|99|~|1|~|0|~|\(\omega^{32} = ?\)|~|\(\omega\)|~|\(\omega^2\)|~|1|~|0
+###
+2023|~|100|~|0|~|0|~|\(\displaystyle\int e^{\tan x} \sec^2 x\,dx\)|~|\(e^{\tan x} + c\)|~|\(\dfrac{e^{\tan x}}{\sec^2 x} + c\)|~|\(e^{\tan x} 2x + c\)|~|None
+###
+2023|~|101|~|1|~|0|~|Harmonic mean between \(p\) and \(q\)|~|\(\dfrac{p+q}{2}\)|~|\(\dfrac{2pq}{p+q}\)|~|\(\sqrt{pq}\)|~|None
+###
+2023|~|102|~|2|~|0|~|\(\cos\dfrac{x}{2} = ?\)|~|\(\dfrac{1+\cos x}{2}\)|~|\(\dfrac{1-\cos x}{2}\)|~|\(\sqrt{\dfrac{1+\cos x}{2}}\)|~|\(\sqrt{\dfrac{1-\cos x}{2}}\)
+###
+2023|~|103|~|0|~|0|~|\(S_1 = t^3 - 2t + 1,\ S_2 = t^2 + 5t + 5\); find the difference of velocity at \(t=2\)|~|1|~|\(-1\)|~|2|~|0
+###
+2023|~|104|~|1|~|0|~|\(\sqrt{y} - e^x = 2\) then \(\dfrac{dy}{dx} = ?\)|~|\(\dfrac{e^x}{2\sqrt y}\)|~|\(e^x 2\sqrt y\)|~|\(\dfrac{e^x}{2}\)|~|None
+###
+2023|~|105|~|2|~|0|~|\((5x-2) + (5y-8)i = 3x + (2y-2)i\) then \(x\) and \(y\) are|~|\((-1,-2)\)|~|\((-1,2)\)|~|\((1,2)\)|~|\((2,1)\)
+###
+2023|~|106|~|1|~|0|~|\(\displaystyle\int_0^{\pi} \sqrt{1 - \cos x}\,dx\)|~|\(\sqrt2\)|~|\(2\sqrt2\)|~|\(-2\sqrt2\)|~|None
+###
+2023|~|107|~|0|~|0|~|In an A.P., \(T_4 = 4\) and \(T_{22} = 5\), then \(T_{19} = ?\)|~|\(\dfrac{29}{6}\)|~|\(\dfrac{27}{6}\)|~|\(\dfrac{6}{29}\)|~|\(\dfrac{6}{27}\)
+###
+2023|~|108|~|3|~|1|~|In a G.P., \(a = 7\), \(T_n = 448\) and \(S_n = 889\), then \(r = ?\) (computed \(r=2\), not among the options)|~|0|~|3|~|4|~|None
+###
+2023|~|109|~|1|~|0|~|\(x^2 + y^2 - 4x - 6y + 9 = 0\) then centre is|~|\((2,-3)\)|~|\((2,3)\)|~|\((-2,-3)\)|~|\((3,2)\)
+###
+2023|~|110|~|1|~|0|~|\(\displaystyle\int_1^3 f(x)\,dx = 3\) then \(\displaystyle\int_1^3 5f(x)\,dx = ?\)|~|12|~|15|~|18|~|21
+###
+2023|~|111|~|3|~|0|~|\(\dfrac{x-2}{x+2} + \dfrac{x+2}{x-2} = \dfrac{34}{15}\) then the solution of the equation is|~|8|~|\(-8\)|~|6|~|a and b
+###
+2023|~|112|~|1|~|0|~|\(\displaystyle\int \dfrac{dx}{a^2 - x^2} = ?\)|~|\(\dfrac{1}{2a}\ln\left(\dfrac{x-1}{x+1}\right) + c\)|~|\(\dfrac{1}{2a}\ln\left(\dfrac{x+a}{x-a}\right) + c\)|~|\(\dfrac{1}{2a}\ln\left(\dfrac{x-1}{x+1}\right) + c\)|~|None
+###
+2023|~|113|~|0|~|0|~|\(\displaystyle\int x \cot^2 x\,dx\) (read as \(\int x\cot x^2\,dx\))|~|\(\tfrac12 \ln\sin x^2 + c\)|~|\(\ln\sin x^2 + c\)|~|\(2\ln\sin x^2 + c\)|~|None
+###
+2023|~|114|~|0|~|0|~|If \(A^{k+1} = A\) and \(k\) is a positive integer then it is|~|Periodic|~|Null|~|Idempotent|~|None
+###
+2023|~|115|~|2|~|0|~|\(\displaystyle\int \tan^{-1} x\,dx\)|~|\(x\tan^{-1} x - \tfrac12\ln(1+x^2) + c\)|~|\(x\tan^{-1} x - \ln\sqrt{1+x^2} + c\)|~|Both a and b|~|None
+###
+2023|~|116|~|1|~|0|~|For the hyperbola \(2x^2 - y^2 = 16\), its focus is|~|\((0,\pm2\sqrt6)\)|~|\((\pm2\sqrt6,0)\)|~|\((\pm\sqrt6,0)\)|~|\((0,\pm\sqrt6)\)
+###
+2023|~|117|~|0|~|0|~|A diagonal matrix in which all the diagonal elements are equal to one is|~|Unit / Identity|~|Null Matrix|~|Periodic Matrix|~|None
+###
+2023|~|118|~|3|~|0|~|If \((0,1),(x,1),(2,3)\) are collinear then the value of \(x\) is|~|1|~|\(-1\)|~|\(-2\)|~|0
+###
+2023|~|119|~|1|~|0|~|\(\displaystyle\int x^5 e^{7-4x^6}\,dx\)|~|\(e^{7-4x^6} + c\)|~|\(-\tfrac{1}{24} e^{7-4x^6} + c\)|~|\(-\tfrac14 e^{7-4x^6} + c\)|~|None
+###
+2023|~|120|~|0|~|0|~|\(\sqrt{\dfrac{S(S-a)}{bc}} = ?\)|~|\(\cos\dfrac{\alpha}{2}\)|~|\(\sin\dfrac{x}{2}\)|~|\(\tan\dfrac{x}{2}\)|~|\(\Delta R\)
+###
+2023|~|121|~|1|~|0|~|The hyperbola \(9x^2 - 16y^2 = 144\). The equation of asymptotes is|~|\(y = \pm\tfrac43 x\)|~|\(y = \pm\tfrac34 x\)|~|\(y = \pm\tfrac{16}{3} x\)|~|\(y = \pm\tfrac{3}{16} x\)
+###
+2023|~|122|~|1|~|0|~|\(\displaystyle\lim_{x\to\infty} \dfrac{\ln x}{x} = ?\)|~|1|~|0|~|\(-1\)|~|\(-2\)
+###
+2023|~|123|~|0|~|0|~|\(\displaystyle\int (2x+5)^2\,dx\)|~|\(\dfrac{(2x+5)^3}{6} + c\)|~|\(\dfrac{(2x+5)^4}{8} + c\)|~|\((2x+5)^3 + c\)|~|None
+###
+2023|~|124|~|1|~|0|~|\(\sin\theta + \cos\theta \cot\theta = ?\)|~|\(\sin\theta\)|~|\(\mathrm{cosec}\,\theta\)|~|\(\sec\theta\)|~|\(\tan\theta\)
+###
+2023|~|125|~|1|~|0|~|If the line passes through the origin and has gradient \(\infty\) then the equation is|~|\(y = 0\)|~|\(x = 0\)|~|\(y = 1\)|~|\(x = 1\)
+###
+2023|~|126|~|0|~|0|~|\(\dfrac{x^3 - 3x^2 + 5x - 6}{x-2} = ?\)|~|\(x^2 - x + 3\)|~|\(x - 3\)|~|\(x + 3\)|~|\(x^2 + 3\)
+###
+2023|~|127|~|2|~|0|~|\(\displaystyle\int \dfrac{dx}{ax+b} = ?\)|~|\(\ln(ax+b) + c\)|~|\(\dfrac{\ln(ax+b)}{2} + c\)|~|\(\dfrac1a \ln(ax+b) + c\)|~|None
+###
+2023|~|128|~|0|~|0|~|\(\displaystyle\int \dfrac{dx}{9+x^2} = ?\)|~|\(\dfrac13 \tan^{-1}\left(\dfrac{x}{3}\right) + c\)|~|\(\tan^{-1}\left(\dfrac{x}{3}\right) + c\)|~|\(\dfrac13 \tan^{-1}(x) + c\)|~|None
+###
+2023|~|129|~|1|~|0|~|\(\displaystyle\lim_{x\to\pi/2} \dfrac{\cos x}{x^2} = ?\)|~|\(\dfrac{\pi}{2}\)|~|0|~|1|~|\(-1\)
+###
+2023|~|130|~|1|~|0|~|\(\cos 3x = \tfrac12\) then the solution is|~|\(\mathrm{Arc}\cos\left(\tfrac12\right)\)|~|\(\tfrac13 \mathrm{Arc}\cos\left(\tfrac12\right)\)|~|\(\cos\left(\tfrac12\right)\)|~|\(\cos^{-1}\left(\tfrac12\right)\)
+###
+2023|~|131|~|0|~|0|~|Middle term of \(x^2 + \dfrac{16}{25}\) is|~|\(\pm\dfrac{8x}{5}\)|~|\(\dfrac{8x}{5}\)|~|\(-\dfrac{8x}{5}\)|~|None
+###
+2023|~|132|~|0|~|0|~|\(\dfrac{\cos\theta}{\tan\theta \sin\theta} = ?\)|~|\(\dfrac{1}{\tan^2\theta}\)|~|\(\dfrac{1}{\cot^2\theta}\)|~|\(\dfrac{1}{\sin^2\theta}\)|~|\(\dfrac{1}{\sec^2\theta}\)
+###
+2023|~|133|~|0|~|0|~|Latus rectum of the parabola \(y^2 = 4ax\)|~|\(|4a|\)|~|\(|6a|\)|~|\(|12a|\)|~|None
+###
+2023|~|134|~|0|~|0|~|Solve for \(x\): \(\begin{vmatrix}1&a&b\\1&x&b\\1&c&x\end{vmatrix} = 0\)|~|\((a,b)\)|~|\((a^2,a)\)|~|\((a^2,b^2)\)|~|\((b,b^2)\)
+###
+2023|~|135|~|1|~|0|~|\(\displaystyle\lim_{x\to0} \dfrac{\sin 5x - \sin 3x}{x} = ?\)|~|\(-2\)|~|2|~|1|~|\(-1\)
+###
+2023|~|136|~|3|~|0|~|\(Z \cdot \bar Z = ?\) (\(Z\) is a complex number and \(\bar Z\) its conjugate)|~|\(|Z|^2\)|~|\(|\bar Z|^2\)|~|\(Z^2\)|~|Both a and b
+###
+2023|~|137|~|2|~|0|~|\(\sqrt{x+3} + \sqrt{x+5} = \sqrt{12x+13}\) is|~|Reciprocal Equation|~|Exponential Equation|~|Radical Equation|~|None
+###
+2023|~|138|~|1|~|0|~|\(4^{1+x} + 4^{1-x} = 10\) is|~|Radical equation|~|Exponential equation|~|Reciprocal equation|~|None
+###
+2023|~|139|~|1|~|0|~|Partial fraction of \(\dfrac{1}{x^3 - x}\) is|~|\(\dfrac{A}{x} + \dfrac{B}{x^2-1}\)|~|\(\dfrac{A}{x} + \dfrac{B}{x-1} + \dfrac{C}{x+1}\)|~|\(\dfrac{A}{x} - \dfrac{B}{x-1}\)|~|\(\dfrac{A}{x} + \dfrac{B}{x-1} - \dfrac{C}{x+1}\)
+###
+2023|~|140|~|2|~|0|~|Partial fraction of \(\dfrac{1}{(x^2-1)(x-3)}\) is|~|\(\dfrac{A}{x-1} + \dfrac{B}{x-3}\)|~|\(\dfrac{A}{x^2-1} + \dfrac{B}{x-3}\)|~|\(\dfrac{A}{x-1} + \dfrac{B}{x+1} + \dfrac{C}{x-3}\)|~|None
+###
+2023|~|141|~|2|~|0|~|From a deck of 52 playing cards, the probability of a red king is|~|\(\dfrac{1}{22}\)|~|\(\dfrac{1}{52}\)|~|\(\dfrac{1}{26}\)|~|\(\dfrac{1}{221}\)
+###
+2023|~|142|~|0|~|0|~|\(\displaystyle\lim_{x\to0} \dfrac{\cot x}{\cot^2 x} = ?\)|~|0|~|1|~|\(-1\)|~|None
+###
+2023|~|143|~|1|~|0|~|Let \(A = \begin{bmatrix}2&-2&0\\-3&1&2\\1&-3&1\end{bmatrix}\), \(|A|=12\) and \(B = A^t\), then \(|B| = ?\)|~|\(\dfrac{1}{12}\)|~|12|~|\(-12\)|~|None
+###
+2023|~|144|~|1|~|0|~|\(\left(2 + \dfrac{x}{2}\right)^9\) then the coefficient of the sixth term is|~|64|~|63|~|62|~|65
+###
+2023|~|145|~|1|~|0|~|\(y = 2x + \dfrac1x\) then the slope at \((1,3)\) is|~|0|~|1|~|\(-1\)|~|\(-3\)
+###
+2023|~|146|~|0|~|0|~|If a circle passes through all three vertices of a triangle then the circle is|~|Circum circle|~|In Circle|~|Ex-Circle|~|None
+###
+2023|~|147|~|3|~|0|~|The equation of a circle whose diameter is the line joining \((2,1)\) and \((6,5)\)|~|\(x^2 + y^2 - 4x - 3y + 17 = 0\)|~|\(x^2 + y^2 + 8x - y + 17 = 0\)|~|\(x^2 + y^2 - 8x - 6y + 17 = 0\)|~|\(x^2 + y^2 + 8x - 6y + 17 = 0\)
+###
+2023|~|148|~|0|~|0|~|If \(\cos x = \tfrac34\) then \(\sin x\) (both in 1st quadrant) is|~|\(\dfrac{\sqrt7}{4}\)|~|\(-\dfrac{\sqrt7}{4}\)|~|\(\dfrac{4}{\sqrt7}\)|~|\(-\dfrac{4}{\sqrt7}\)
+###
+2023|~|149|~|2|~|0|~|How many numbers are there between 256 and 789 that are divisible by 7?|~|74|~|75|~|76|~|78
+###
+2023|~|150|~|0|~|0|~|Find the value of \(b\) so that \(2i - 3j,\ bj + i + k,\ 3i - k\) are coplanar.|~|\(-6\)|~|\(-1\)|~|0|~|none
+###
+2023|~|151|~|1|~|0|~|For a parabola with vertex at origin, passing through \((20,-16)\) and symmetric about the y-axis|~|\(x^2 = 25y\)|~|\(x^2 = -25y\)|~|\(x^2 = 4y\)|~|None
+###
+2023|~|152|~|1|~|0|~|If \(-4\) and \(8\) are the roots of a quadratic equation, then the equation is|~|\(x^2 - 4x + 32 = 0\)|~|\(x^2 - 4x - 32 = 0\)|~|\(x^2 + 4x - 32 = 0\)|~|None
+###
+2023|~|153|~|0|~|0|~|How many different arrangements of the word "REARRANGE"?|~|\(\dfrac{9!}{3!\,2!\,2!}\)|~|\(9!\)|~|\(\dfrac{9!}{3!}\)|~|\(\dfrac{9!}{3!\,2!}\)
+###
+2023|~|154|~|2|~|0|~|If 4 A.M.s are inserted between \((a-b)\) and \((9a+11b)\) then the fourth A.M. will be|~|\(\dfrac{13a+7b}{3}\)|~|\(\dfrac{21a+19b}{5}\)|~|\(\dfrac{37a+43b}{5}\)|~|None
+###
+2023|~|155|~|1|~|0|~|\(\displaystyle\int \tan 2x\,dx\)|~|\(\ln\sec 2x + c\)|~|\(\dfrac{\ln\sec 2x}{2} + c\)|~|\(-\ln\sec 2x + c\)|~|None
+###
+2023|~|156|~|3|~|1|~|The equation of the perpendicular bisector of the segment joining \((5,4)\) and \((-4,-2)\). (Correct line is \(18x+12y-21=0\); none of the listed options match.)|~|\(6x + 4y - 7 = 0\)|~|\(6x + 4y + 7 = 0\)|~|\(6x - 4y + 7 = 0\)|~|None
+###
+2023|~|157|~|0|~|0|~|\(f(x) = \sin x\), then \(f''(x)\) is|~|\(-\sin x\)|~|\(\cos x\)|~|\(\sin x\)|~|\(\tan x\)
+###
+2023|~|158|~|1|~|0|~|\(f(x) = \cos x\), then \(f''\left(\tfrac{\pi}{2}\right) = ?\)|~|1|~|0|~|\(-1\)|~|2
+###
+2023|~|159|~|1|~|0|~|\(i^4 = ?\)|~|\(i\)|~|1|~|\(-1\)|~|\(-i\)
+###
+2023|~|160|~|0|~|0|~|\(i^{16} + i^{32} + i^{67} = ?\)|~|\(2 - i\)|~|\(2 + i\)|~|\(i\)|~|\(-i\)
+###
+2023|~|161|~|0|~|0|~|If \(2,3,4\) are the sides of a triangle then \(s\) is|~|4.5|~|3.5|~|2.5|~|7.5
+###
+2023|~|162|~|1|~|0|~|A square matrix \(A\) such that \(A^2 = I\) is called|~|Nilpotent|~|Involuntary|~|Idempotent|~|None
+###
+2023|~|163|~|2|~|0|~|Product of roots of \(3x^2 + x + 2 = 0\)|~|\(-2\)|~|2|~|\(\dfrac23\)|~|\(-\dfrac23\)
+###
+2023|~|164|~|0|~|0|~|The value of \(k\) when \((k,-2)\) and \((3,-7)\) lie on a line with slope \(-4\)|~|\(\dfrac74\)|~|\(-\dfrac74\)|~|\(\dfrac47\)|~|\(-\dfrac47\)
+###
+2023|~|165|~|1|~|0|~|\(\begin{bmatrix}4&2x\\-4x&-3\end{bmatrix} + \begin{bmatrix}-5&-3y\\5y&3\end{bmatrix} = \begin{bmatrix}-1&1\\1&0\end{bmatrix}\), find \(x\) and \(y\)|~|\((4,3)\)|~|\((-4,-3)\)|~|\((-3,-4)\)|~|\((3,4)\)
+###
+2023|~|166|~|3|~|0|~|\((2 - 3i)^2 - 6(3 - 2i) + 13 = ?\)|~|\(6i\)|~|\(-6i\)|~|1|~|\(-10\)
+###
+2023|~|167|~|1|~|0|~|\(\dfrac{d}{dx} x^4 = ?\)|~|\(nx\)|~|\(nx^{n-1}\)|~|\(nx^{n+1}\)|~|None
+###
+2023|~|168|~|0|~|0|~|\(\displaystyle\int C\,dx = ?\)|~|\(Cx + d\)|~|\(Cx^2 + d\)|~|\(cx^3 + d\)|~|None
+###
+2023|~|169|~|1|~|0|~|\(\sin(\alpha + \beta) = ?\)|~|\(\sin\alpha\cos\beta - \cos\alpha\sin\beta\)|~|\(\sin\alpha\cos\beta + \cos\alpha\sin\beta\)|~|\(\cos\alpha\cos\beta - \sin\alpha\sin\beta\)|~|\(\cos\alpha\cos\beta + \sin\alpha\sin\beta\)
+###
+2023|~|170|~|1|~|0|~|Inverse of \(\begin{bmatrix}3&5\\2&4\end{bmatrix}\)|~|\(\begin{bmatrix}2&\tfrac52\\-1&\tfrac32\end{bmatrix}\)|~|\(\begin{bmatrix}2&-\tfrac52\\-1&\tfrac32\end{bmatrix}\)|~|\(\begin{bmatrix}2&\tfrac52\\1&\tfrac32\end{bmatrix}\)|~|None
+###
+2023|~|171|~|2|~|0|~|\(\begin{vmatrix}1&2&4\\8&16&32\\64&128&256\end{vmatrix} = ?\)|~|1|~|\(-1\)|~|0|~|2
+###
+2023|~|172|~|0|~|0|~|\(\dfrac{d}{dx} \tan^{-1}(-x) = ?\)|~|\(\dfrac{-1}{1+x^2}\)|~|\(\dfrac{1}{1+x^2}\)|~|\(\dfrac{1}{1-x^2}\)|~|None
+###
+2023|~|173|~|0|~|0|~|\(\displaystyle\lim_{x\to0} \dfrac{e^x - 1}{x} = ?\)|~|1|~|0|~|\(-1\)|~|None
+###
+2023|~|174|~|1|~|0|~|If \(2a\) and \(a\) are the roots of a quadratic equation then the equation is|~|\(x^2 + 3ax + 2a^2 = 0\)|~|\(x^2 - 3ax + 2a^2 = 0\)|~|\(x^2 - 3ax - 2a^2 = 0\)|~|\(x^2 + 3ax - 2a^2 = 0\)
+###
+2023|~|175|~|0|~|0|~|\(\displaystyle\int \dfrac{f'(x)}{f(x)}\,dx = ?\)|~|\(\ln f(x) + c\)|~|\(\ln f'(x) + c\)|~|\(f(x) + c\)|~|None
+###
+2023|~|176|~|0|~|0|~|\(\vec a = 2i + 3j - k\), then \(|\vec a| = ?\)|~|\(\sqrt{14}\)|~|\(\sqrt{15}\)|~|\(\sqrt{17}\)|~|\(\sqrt{21}\)
+###
+2023|~|177|~|2|~|0|~|\(y = x\), then the angle of the line with respect to the x-axis in anticlockwise direction|~|\(145^\circ\)|~|\(135^\circ\)|~|\(45^\circ\)|~|None
+###
+2023|~|178|~|0|~|0|~|\(\displaystyle\int \sec 2x \tan 2x\,dx\)|~|\(\dfrac{\sec 2x}{2} + c\)|~|\(\dfrac{\tan 2x}{2} + c\)|~|\(\dfrac{\sin 2x}{2} + c\)|~|\(\sin x + c\)
+###
+2023|~|179|~|0|~|0|~|\(\cos 2x - \sin 2x = ?\)|~|\(\cos^2 x - \sin^2 x - 2\sin x\cos x\)|~|\(\cos^2 x + \sin^2 x\)|~|\(\cos^2 x - \sin^2 x\)|~|None
+###
+2023|~|180|~|1|~|0|~|\(\dfrac{(x+1)^2}{9} + \dfrac{(y-1)^2}{1} = 1\) then the equation of the directrix is|~|\(x + 1 = 3\)|~|\(x + 1 = \pm\dfrac{9}{2\sqrt2}\)|~|\(x + 1 = \pm\dfrac92\)|~|none
+###
+2023|~|181|~|0|~|0|~|Find the number whose sum is 5 and product is 6|~|3, 2|~|4, 5|~|6, 8|~|9, 4
+###
+2023|~|182|~|0|~|0|~|\(15^\circ = ?\)|~|\(\dfrac{\pi}{12}\) radian|~|\(\dfrac{\pi}{6}\) radian|~|\(\dfrac{\pi}{2}\) radian|~|\(\dfrac{\pi}{3}\) radian
+###
+2023|~|183|~|3|~|0|~|If the ratio of angles is \(1:1:2\) then the triangle is|~|Equilateral|~|Isosceles|~|Scalene|~|Right Angle
+###
+2023|~|184|~|1|~|0|~|\(\left(1 + \dfrac52 x\right)^{1/2}\), then the value of \(x\) for which the expansion is valid|~|\(x > \tfrac25\)|~|\(|x| < \tfrac25\)|~|\(x < \tfrac52\)|~|\(|x| > \tfrac52\)
+###
+2023|~|185|~|1|~|0|~|\(\dfrac{x^2}{81} + \dfrac{y^2}{121} = 1\) then the length of the latus rectum is|~|\(\dfrac{11}{162}\)|~|\(\dfrac{162}{11}\)|~|161|~|None
+###
+2023|~|186|~|1|~|0|~|Range of \(\mathrm{cosec}\,x\) is|~|\([-1,1]\)|~|\(\mathbb{R} - (-1,1)\)|~|\(\mathbb{R} - (1,1)\)|~|\((1,1)\)
+###
+2023|~|187|~|2|~|0|~|Three coins are tossed simultaneously; probability of at least one head?|~|\(\dfrac38\)|~|\(\dfrac12\)|~|\(\dfrac78\)|~|\(\dfrac18\)
+###
+2023|~|188|~|0|~|0|~|If \(A = \{1,2,3\}\) and \(B = \{0,1,2,3\}\) then which one is true?|~|\(A \ne B\)|~|\(B = A\)|~|\(A \subset B\)|~|None
+###
+2023|~|189|~|1|~|0|~|\((3+x)^7\) then the coefficient of \(x^3\) is|~|2815|~|2835|~|1825|~|2845
+###
+2023|~|190|~|0|~|0|~|For the equation \(3x^2 + kx + 12 = 0\), find \(k\) if the sum of roots equals the product of roots|~|\(-12\)|~|12|~|3|~|\(-3\)
+###
+2023|~|191|~|3|~|0|~|\(\displaystyle\int\left(\dfrac1x - e^x\right)dx = ?\) (equals \(\ln|x| - e^x + c\); none of the listed forms match)|~|\(\ln x(e^x - 1) + c\)|~|\(\ln\left(\dfrac{x}{e^{x-1}}\right) + c\)|~|\(\ln(x\,e^x - 1) + c\)|~|None
+###
+2023|~|192|~|1|~|0|~|If \(\vec A = i - 2j - k,\ \vec B = 4i - 4j + 7ak\) are orthogonal then \(a = ?\)|~|\(\dfrac{12}{9}\)|~|\(\dfrac{12}{7}\)|~|\(\dfrac{12}{5}\)|~|\(\dfrac{12}{11}\)
+###
+2023|~|193|~|1|~|0|~|If the expansion of \(\left(x - \dfrac2x\right)^{12}\) then the value of \(r\) for the term independent of \(x\)|~|5|~|6|~|7|~|8
+###
+2023|~|194|~|3|~|0|~|Third term of a G.P. is \(\tfrac94\) and its sixth term is \(\tfrac{243}{32}\), then the first term and common ratio (note: \(r=\tfrac32\) is not among options)|~|1, 2|~|1, 3|~|1, \tfrac23|~|None
+###
+2023|~|195|~|0|~|0|~|If \(M\) is the midpoint of \(\overline{AB}\) with \(M(1,0)\) and \(B(2,3)\), find \(A\)|~|\((0,-3)\)|~|\((1,3)\)|~|\((2,4)\)|~|\((1,5)\)
+###
+2023|~|196|~|1|~|1|~|\(\dfrac{\sin\theta + 7\cos\theta}{\sin^3\theta + \cos^3\theta + \cos\theta} = ?\) if \(\tan\theta = \tfrac34\) (transcription of the given options does not match a clean derivation; answer uncertain)|~|\(\dfrac{31}{95}\)|~|\(\dfrac{93}{112}\)|~|\(\dfrac{95}{112}\)|~|\(\dfrac{112}{95}\)
+###
+2023|~|197|~|3|~|0|~|The amount of water in a tank \(t\) minutes after it starts to drain is \(w = 100(t-15)^2\) gallons. The water is running out after 5 min at a rate of|~|2500 gal/min|~|1500 gal/min|~|1000 gal/min|~|\(-2000\) gal/min
+###
+2023|~|198|~|3|~|0|~|If \(f(x) = x^3 - 9x^2 + 15x + 3\) then the relative maximum is|~|15|~|20|~|30|~|10
+###
+2023|~|199|~|2|~|0|~|\(\displaystyle\int \dfrac{f'(x)\,dx}{f(x)} = ?\)|~|\(f(x) + c\)|~|\(f'(x) + c\)|~|\(\ln f(x) + c\)|~|None
+###
+2023|~|200|~|1|~|1|~|\(f(z) = \sqrt{z^2 + 8z}\); how much does \(f(z)\) increase as \(z\) goes from 7 to 8? (Exact difference \(\approx 1.07\); option b \(\approx 1.007\) is closest)|~|0.646|~|1.007|~|2.963|~|3.245
+###
+2023|~|201|~|0|~|0|~|\(3x - 2y = 5\) and \(2x + 3y = 4\); find the angle between the lines|~|\(90^\circ\)|~|\(0^\circ\)|~|\(45^\circ\)|~|\(60^\circ\)
+###
+2023|~|202|~|0|~|0|~|\(\dfrac{x^3 - 3x^2 + 5x - 6}{x-2} = ?\)|~|\(x^2 - x + 3\)|~|\(x - 3\)|~|\(x + 3\)|~|13
+###
+2023|~|203|~|3|~|1|~|Find the equation of the ellipse if the end of the minor axis is \((\pm3,0)\) and the directrix is \(7y = \pm16\sqrt7\). (Derivation gives \(16x^2 + 9y^2 = 144\), not among the options.)|~|\(4x^2 + 3y^2 = 32\)|~|\(4x^2 + 3y^2 = 16\)|~|\(4x^2 + 7y^2 = 8\)|~|None
+###
+2023|~|203b|~|1|~|0|~|Find the equation of the rectangular hyperbola if foci are \((\pm2,0)\)|~|\(x^2 - y^2 = 4\)|~|\(x^2 - y^2 = 2\)|~|\(x^2 - y^2 = 1\)|~|None
+###
+2023|~|204|~|0|~|0|~|\(\dfrac13,\ 1\tfrac23,\ 3,\ \ldots\) then \(T_n\) of the sequence is|~|\(\dfrac13(4n - 3)\)|~|\(\dfrac13(4n + 3)\)|~|\(\dfrac12(4n - 3)\)|~|\(\dfrac15(4n - 3)\)
+###
+2023|~|205|~|1|~|0|~|For any square matrix \(A = -A^t\) then the matrix is|~|Symmetric|~|Skew symmetric|~|Idempotent|~|Involuntary
+###
+2023|~|206|~|1|~|0|~|\(4x^2 + 25y^2 = 100\) then the equation of the directrix is|~|\(21x = \pm25\)|~|\(\sqrt{21}\,x = \pm25\)|~|\(21x = \pm\sqrt{23}\)|~|\(\sqrt{21}\,x = \pm5\)
+###
+2023|~|207|~|0|~|0|~|\((x+2)^3 - 3(x+2)^2 + 3(x+2) - 1 = ?\)|~|\((x+1)^3\)|~|\((x-1)^3\)|~|\((x-2)^3\)|~|None
+###
+2023|~|208|~|1|~|0|~|Middle term of \(\left(x^3 + \dfrac{1}{x^2}\right)^7\) is|~|3rd and 4th|~|4th and 5th|~|5th and 6th|~|6th and 7th
+###
+2023|~|209|~|2|~|0|~|For \(9x^2 + 16y^2 = 144\) the coordinate of focus is|~|\((\pm4,0)\)|~|\((0,\pm4)\)|~|\((\pm\sqrt7,0)\)|~|\((0,\pm\sqrt7)\)
+###
+2023|~|210|~|3|~|0|~|Partial fraction \(\dfrac{x+34}{(x-6)(x-2)}\)|~|\(\dfrac{A}{x-2}\)|~|\(\dfrac{A}{x+2}\)|~|\(\dfrac{A}{x+6} + \dfrac{B}{x-2}\)|~|None
+###
+2023|~|211|~|1|~|0|~|Modulus of \((x,y)\) is|~|\(\sqrt{x^2 - y^2}\)|~|\(\sqrt{x^2 + y^2}\)|~|\(\sqrt{x^2 - \dfrac{y^2}{2}}\)|~|\(x^2 + y^2\)
+###
+2023|~|212|~|1|~|0|~|\(\dfrac{d}{dx} UV = ?\)|~|\(UV' - VU'\)|~|\(UV' + VU'\)|~|\(UV' - UV'\)|~|\(VU'\)
+###
+2023|~|213|~|3|~|0|~|\(\displaystyle\lim_{x\to0}\left(\dfrac1x - \dfrac{1}{e^x - 1}\right)\) (equals \(\tfrac12\), not among options)|~|2|~|\(-3\)|~|\(-4\)|~|None
+###
+2023|~|214|~|0|~|1|~|\(\displaystyle\int \dfrac{dx}{\sqrt{9-x^2}}\) (evaluated with limit 1; \(= \sin^{-1}\tfrac13\))|~|\(\sin^{-1}\left(\dfrac13\right)\)|~|\(\sin^{-1}\left(\dfrac14\right)\)|~|\(\sin^{-1}\left(\dfrac15\right)\)|~|None
+###
+2023|~|215|~|0|~|0|~|The coefficient of the term involving \(x^5\) in \(\left(1 - \dfrac{x}{2}\right)^{12}\) is|~|\(-\dfrac{99}{4} x^5\)|~|\(\dfrac{99}{4} x^5\)|~|\(99 x^5\)|~|\(\dfrac{1}{32} x^5\)
+###
+2023|~|216|~|1|~|0|~|\(\displaystyle\lim_{x\to0} \dfrac{a^x - 1}{x} = ?\)|~|\(\ln x\)|~|\(\ln a\)|~|0|~|1
+###
+2023|~|217|~|1|~|0|~|If two A.M.s are inserted between \(3a\) and \(3b\) then the sum of the series will be|~|\(4a + 4b\)|~|\(6a + 6b\)|~|\(3a + 3b\)|~|None
+###
+2023|~|218|~|1|~|0|~|\(\dfrac{d}{dx}\left(2 - \sqrt{x}\right) = ?\)|~|\(\dfrac{1}{2\sqrt x}\)|~|\(\dfrac{-1}{2\sqrt x}\)|~|\(\dfrac{-1}{2}\)|~|\(\dfrac12\)
+###
+2023|~|219|~|0|~|0|~|Range of \(\cos x\) is|~|\([-1,1]\)|~|\((-1,1)\)|~|\((-1,1]\)|~|\(]-1,1[\)
+###
+2023|~|220|~|3|~|0|~|Solution of the equation \(\dfrac{x-2}{x+2} + \dfrac{x+2}{x-2} = \dfrac{34}{15}\)|~|8|~|\(-8\)|~|4|~|A and B
+###
+2023|~|221|~|2|~|0|~|In \(\triangle ABC\), \(\sin A = \tfrac13,\ \sin B = \tfrac14\); \(\sin C = ?\)|~|\(\dfrac17\)|~|\(\dfrac{7}{12}\)|~|\(\dfrac{2\sqrt2 + \sqrt{15}}{12}\)|~|\(\dfrac{5}{12}\)
+###
+2023|~|222|~|0|~|0|~|If \(\sin x = \tfrac34\) and \(\cos x > 0\) then \(\cos x = ?\)|~|\(\dfrac{\sqrt7}{4}\)|~|\(-\dfrac{\sqrt7}{4}\)|~|\(\pm\dfrac{\sqrt7}{4}\)|~|None
+###
+2023|~|223|~|0|~|0|~|\(\displaystyle\int \sec 3x \tan 3x\,dx\)|~|\(\dfrac{\sec 3x}{3} + C\)|~|\(\sec 3x + C\)|~|\(\tan 3x + C\)|~|\(-\tan 3x + C\)
+###
+2023|~|224|~|1|~|0|~|\(\cos 10^\circ \cos 20^\circ - \sin 10^\circ \sin 20^\circ = ?\)|~|\(-\dfrac{\sqrt3}{2}\)|~|\(\dfrac{\sqrt3}{2}\)|~|\(\dfrac12\)|~|\(-\dfrac12\)
+###
+2023|~|225|~|2|~|0|~|\((a^2)^3 + b^2 \cdot b^3 = ?\)|~|\(a^2 + b^5\)|~|\(a^2 + b^3\)|~|\(a^6 + b^5\)|~|\(a^6\)
+###
+2023|~|226|~|2|~|0|~|If a circle passes through all three vertices of a triangle then it is called|~|Incircle|~|ex-circle|~|Circum circle|~|Centroid
+###
+2023|~|227|~|1|~|0|~|The value of \(0!\) and \(1!\) are|~|0 and 1|~|1 and 1|~|1 and 0|~|0
+###
+2023|~|228|~|2|~|0|~|\(16^x = 4\) and \(5^{x+y} = 625\) then \(y = ?\)|~|\(\dfrac32\)|~|\(\dfrac52\)|~|\(\dfrac72\)|~|\(\dfrac92\)
+###
+2023|~|229|~|2|~|0|~|\(\sqrt{y} = e^x + 2\) then \(\dfrac{dy}{dx}\) is|~|\(\dfrac{e^x}{\sqrt y}\)|~|\(e^x \sqrt2 y\)|~|\(e^x 2\sqrt y\)|~|\(\dfrac{\sqrt y}{e^x}\)
+###
+2023|~|230|~|1|~|0|~|If \(A\) and \(B\) are two sets then \((A \cup B)'\)|~|\(A' \cup B'\)|~|\(A' \cap B'\)|~|\(A \cup B\)|~|\(A \cap B\)
+###
+2023|~|231|~|0|~|0|~|Third term of a G.P. is \(\tfrac94\) and the sixth term is \(\tfrac{243}{32}\), then the first term and common ratio is|~|\(1,\ \tfrac32\)|~|\(2,\ \tfrac49\)|~|\(1,\ \tfrac23\)|~|\(1,\ -\tfrac32\)
+###
+2023|~|232|~|0|~|0|~|\(\displaystyle\int \sin^3 x\,dx = ?\)|~|\(-\cos x + \dfrac{\cos^3 x}{3} + C\)|~|\(-\cos x + \dfrac{\cos^2 x}{2} + C\)|~|\(-\cos x + C\)|~|\(\dfrac{-\cos^3 x}{3} + \cos x + C\)
+###
+2023|~|233|~|1|~|0|~|\(\displaystyle\lim_{x\to a} \dfrac{x^n - a^n}{x-a} = ?\)|~|\(n x^{n-1}\)|~|\(n a^{n-1}\)|~|\(na\)|~|None
+###
+2023|~|234|~|2|~|0|~|If \(\tan x = 3\) then \(\dfrac{\sin^2 x}{\cos^2 x} = ?\)|~|3|~|1|~|9|~|\(\pm9\)
+###
+2023|~|235|~|0|~|0|~|Two coins are tossed together once; probability of obtaining at most two heads is|~|1|~|\(\dfrac12\)|~|\(\dfrac14\)|~|0
+###
+2023|~|236|~|3|~|1|~|If \(f(x) = x^7 - 97x^6 - 199x^5 + 99x^4 - 2x + 190\) then \(f(99) = ?\) (garbled polynomial; clean telescoping form gives \(-8\))|~|0|~|1|~|2|~|\(-8\)
+###
+2023|~|237|~|0|~|0|~|The area of the triangle with vertices \((3,1),(-2,5),(-4,-5)\)|~|29 sq unit|~|31 sq unit|~|25 sq unit|~|33 sq unit
+###
+2023|~|238|~|1|~|0|~|\(\displaystyle\int (e^x + x)\,dx\)|~|\(e^x + x + C\)|~|\(e^x + \dfrac{x^2}{2} + C\)|~|\(e^x + x^3 + C\)|~|\(e^x + C\)
+###
+2023|~|239|~|1|~|0|~|A square matrix such that \(A^2 = I\) is called|~|Nilpotent|~|Involuntary|~|Symmetric|~|None
+###
+2023|~|240|~|2|~|0|~|\(y^2 = -12x\) then the focus is|~|\((0,3)\)|~|\((0,-3)\)|~|\((-3,0)\)|~|\((3,0)\)
+###
+2023|~|241|~|0|~|0|~|\(7y^2 - 4x^2 = 28\) then the distance between its directrices is|~|\(\dfrac{8\sqrt{11}}{11}\)|~|8|~|\(\sqrt{11}\)|~|\(\dfrac{8\sqrt{13}}{11}\)
+###
+2023|~|242|~|0|~|0|~|\(f(x) = x^x\) then \(f'(x)\) is|~|\((1 + \ln x) x^x\)|~|\((1 - \ln x) x^x\)|~|\(\dfrac{(1 + \ln x)}{x^x}\)|~|None
+###
+2023|~|243|~|0|~|0|~|\(\displaystyle\lim_{x\to0} x^x = ?\)|~|1|~|0|~|\(-1\)|~|2
+###
+2023|~|244|~|1|~|0|~|\(\dfrac{d}{dx} \cos^{-1} 2x = ?\)|~|\(\dfrac{x^3}{\sqrt{1-4x^2}}\)|~|\(\dfrac{-2}{\sqrt{1-4x^2}}\)|~|\(\dfrac{1}{1+4x^2}\)|~|\(\dfrac{-1}{1+4x^2}\)
+###
+2023|~|245|~|1|~|0|~|\(x^2 - 6x - 6y + 21 = 0\) then the equation of the directrix of the parabola is|~|\(2x = 1\)|~|\(2y = 1\)|~|\(2y = -1\)|~|\(2x = -1\)
+###
+2023|~|246|~|0|~|0|~|\(\dfrac{\cos x}{\tan x \sin x} = ?\)|~|\(\cot^2 x\)|~|\(\dfrac{1}{\cot^2 x}\)|~|\(\cos^2 x\)|~|\(\sin^2 x\)
+###
+2023|~|247|~|3|~|1|~|In an H.P., \(T_{10} = 34,\ T_{34} = 25\) and \(T_n = 3\), then the number of terms is (the reciprocals give a non-integer count; answer uncertain)|~|2000|~|10|~|8|~|None
+###
+2023|~|248|~|0|~|0|~|\(5x^2 + 9y^2 = 45\) then the equation of the directrix of the ellipse is|~|\(2x = \pm9\)|~|\(4x = \pm13\)|~|\(x = \pm9\)|~|None
+###
+2023|~|249|~|0|~|0|~|\(\dfrac{d}{dx} x^{\cos x} = ?\)|~|\(\left[\dfrac{\cos x}{x} - \ln x \sin x\right] x^{\cos x}\)|~|\(\left[\dfrac{\cos x}{x} + \ln x \sin x\right] x^{\cos x}\)|~|\(\left[\dfrac{\cos x}{x} - \ln x \sin x\right]\)|~|None
+###
+2023|~|250|~|0|~|0|~|\(1 \cdot \omega \cdot \omega^2 = ?\) (\(\omega\) is the cube root of unity)|~|1|~|\(\omega^2\)|~|\(\omega\)|~|0
+###
+2023|~|251|~|3|~|0|~|Two dice are rolled once; probability of the same faces is|~|\(\dfrac15\)|~|\(\dfrac14\)|~|\(\dfrac29\)|~|\(\dfrac16\)
+###
+2023|~|252|~|1|~|0|~|For any square matrix \(A^{k+1} = A\) then it is called|~|Symmetric matrix|~|Periodic matrix|~|Rectangular matrix|~|None
+###
+2023|~|253|~|0|~|0|~|\(\dfrac{d}{dx}\left(\dfrac{e^x + 1}{e^x - 1}\right) = ?\)|~|\(\dfrac{-2e^x}{(e^x-1)^2}\)|~|\(\dfrac{2e^x}{(e^x-1)^2}\)|~|\(\dfrac{e^x}{(e^x-1)^2}\)|~|None
+###
+2023|~|254|~|0|~|0|~|\(\dfrac{\cos^4 x - \sin^4 x}{\cos^2 x - \sin^2 x} = ?\)|~|1|~|\(-1\)|~|\(\cos^2 x - \sin^2 x\)|~|None
+###
+2023|~|255|~|1|~|0|~|\(\omega^{32} = ?\)|~|\(\omega\)|~|\(\omega^2\)|~|1|~|0
+###
+2023|~|256|~|1|~|0|~|\(\displaystyle\lim_{x\to\infty} \dfrac{\ln x}{x} = ?\)|~|1|~|0|~|\(-1\)|~|\(\infty\)
+###
+2023|~|257|~|0|~|0|~|\(\displaystyle\int e^{\tan x} \sec^2 x\,dx = ?\)|~|\(e^{\tan x} + c\)|~|\(e^{\tan x} \sec^2 x + c\)|~|\(-e^{\tan x} + c\)|~|None
+###
+2023|~|258|~|0|~|1|~|\(\sqrt{\dfrac{1-\cos A}{1+\cos A}} = \dfrac{x}{y}\) then \(\tan A = ?\) (derivation gives \(\tfrac{2xy}{y^2-x^2}\); option a is the intended key up to sign)|~|\(\dfrac{2xy}{x^2-y^2}\)|~|\(\dfrac{2xy}{x^2+y^2}\)|~|\(\dfrac{2xy}{x^2+y^4}\)|~|\(\dfrac{2xy^2}{x^2-y^2}\)
+###
+2023|~|259|~|1|~|0|~|\(\dfrac{1}{1+\sin x} + \dfrac{1}{1-\sin x} = ?\)|~|\(2\cos^2 x\)|~|\(2\sec^2 x\)|~|\(2\tan^2 x\)|~|\(2\,\mathrm{cosec}^2 x\)
+###
+2023|~|260|~|3|~|0|~|\(\left(x^3 + \dfrac{1}{x^2}\right)^7\) then the middle of the expansion is|~|\(35x\)|~|\(35x^6\)|~|\(35x^3\)|~|Both a and b
+###
+2023|~|261|~|1|~|0|~|\(\dfrac{x^2}{16} - \dfrac{y^2}{9} = 1\) then the foci of the hyperbola are|~|\((0,\pm5)\)|~|\((\pm5,0)\)|~|\((\pm4,0)\)|~|\((0,\pm4)\)
+###
+2023|~|262|~|2|~|0|~|\(ax^2 + 2hxy + by^2 = 0\) represents a pair of imaginary lines if|~|\(h^2 - ab > 0\)|~|\(h^2 - ab = 0\)|~|\(h^2 - ab < 0\)|~|\(h^2 = ab\)
+###
+2023|~|263|~|1|~|0|~|A bag contains 2 red, 4 yellow and 3 blue balls. The probability of drawing a red ball is|~|\(\dfrac19\)|~|\(\dfrac29\)|~|\(\dfrac49\)|~|\(\dfrac39\)
+###
+2023|~|264|~|0|~|0|~|If the roots of a quadratic equation are \(-4\) and \(7\), then the equation is|~|\(x^2 - 3x - 28 = 0\)|~|\(x^2 + 3x - 28 = 0\)|~|\(x^2 - 3x + 28 = 0\)|~|\(x^2 + 3x + 28 = 0\)
+###
+2023|~|265|~|0|~|0|~|\(\displaystyle\lim_{x\to0} \dfrac{\sin 5x - \sin 3x}{x} = ?\)|~|2|~|\(-2\)|~|1|~|8
+###
+2023|~|266|~|1|~|0|~|If \(x = 2^a\) then \(2^{a+3} = ?\)|~|\(4x\)|~|\(8x\)|~|\(16x\)|~|\(2x\)
+###
+2023|~|267|~|0|~|0|~|\(\displaystyle\int \sec 3x \cos 3x\,dx = ?\)|~|\(x + c\)|~|\(\sec 3x + c\)|~|\(\tan 3x + c\)|~|\(3x + c\)
+###
+2023|~|268|~|1|~|0|~|From a deck of 52 playing cards, the probability of drawing a red king is|~|\(\dfrac{1}{52}\)|~|\(\dfrac{1}{26}\)|~|\(\dfrac{1}{13}\)|~|\(\dfrac{2}{13}\)
+###
+2023|~|269|~|1|~|0|~|From a deck of cards, the probability of a non-ace card is|~|\(\dfrac{4}{52}\)|~|\(\dfrac{48}{52}\)|~|\(\dfrac{1}{13}\)|~|\(\dfrac{12}{13}\)
+###
+2023|~|270|~|0|~|0|~|Let \(A\) be a square matrix with \(|A| = 12\) and \(B = A^t\), then \(|B| = ?\)|~|12|~|\(-12\)|~|\(\dfrac{1}{12}\)|~|\(-\dfrac{1}{12}\)
+###
+2023|~|271|~|2|~|0|~|\(\dfrac{(n+1)!}{(n-1)!} = ?\)|~|\(n\)|~|\(n - 1\)|~|\(n(n+1)\)|~|\(n + 1\)
+###
+2023|~|272|~|3|~|0|~|If 4 A.M.s are inserted between \((a-b)\) and \((9a+11b)\), then the fourth A.M. is|~|\(\dfrac{13a+7b}{3}\)|~|\(\dfrac{21a+19b}{5}\)|~|\(\dfrac{29a+31b}{5}\)|~|\(\dfrac{37a+43b}{5}\)
+###
+2023|~|273|~|1|~|0|~|In the expansion of \((3+x)^7\) the coefficient of \(x^3\) is|~|2815|~|2835|~|1825|~|2845
+###
+2023|~|274|~|2|~|0|~|Which law reduces to the form of the Pythagoras theorem?|~|Law of sine|~|Law of tangent|~|Law of cosine|~|Half-angle formula
+###
+2023|~|275|~|1|~|0|~|The first three terms of a G.P. are \(x+10,\ x-2,\ x-10\). The value of \(x\) and the sum to infinity respectively|~|26, 106|~|26, 108|~|26, 110|~|26, 105
+###
+2023|~|276|~|2|~|0|~|Product of the roots of \(3x^2 + 4x + 2 = 0\) is|~|\(\dfrac43\)|~|\(-\dfrac43\)|~|\(\dfrac23\)|~|\(-\dfrac23\)
+###
+2023|~|277|~|0|~|0|~|\((x+2)^3 - 3(x+2)^2 + 3(x+2) - 1 = ?\)|~|\((x+1)^3\)|~|\((x-1)^3\)|~|\((x-2)^3\)|~|\((x+2)^3\)
+###
+2023|~|278|~|0|~|0|~|If \(\vec A = 2i + 2j - k\) and \(\vec B = 6i - 3j + 2k\), then the angle between them is|~|\(\cos^{-1}\left(\dfrac{4}{21}\right)\)|~|\(\cos^{-1}\left(\dfrac{2}{21}\right)\)|~|\(\cos^{-1}\left(\dfrac{4}{7}\right)\)|~|\(\cos^{-1}\left(\dfrac{8}{21}\right)\)
+###
+2023|~|279|~|0|~|0|~|\(\displaystyle\lim_{x\to\pi/2} \dfrac{\cos x}{x^2} = ?\)|~|0|~|1|~|\(\dfrac{\pi}{2}\)|~|\(-1\)
+###
+2023|~|280|~|2|~|0|~|\(1 + \omega + \omega^2 = ?\) (\(\omega\) cube root of unity)|~|1|~|\(\omega\)|~|0|~|\(\omega^2\)
+###
+2023|~|281|~|3|~|1|~|In \(\triangle ABC\), the value of \(\cos\dfrac{\alpha}{2} = ?\) (the standard result \(\sqrt{\tfrac{s(s-a)}{bc}}\) is not listed)|~|\(\sqrt{\dfrac{s-a}{bc}}\)|~|\(\sqrt{\dfrac{s(s-b)}{ac}}\)|~|\(\sqrt{\dfrac{s(s-c)}{ab}}\)|~|None
+###
+2023|~|282|~|1|~|0|~|\(i^3 = ?\)|~|\(i\)|~|\(-i\)|~|1|~|\(-1\)
+###
+2023|~|283|~|1|~|0|~|If \(ax^2 - lx + mn = 0\) then the sum of the roots is|~|\(-\dfrac{l}{a}\)|~|\(\dfrac{l}{a}\)|~|\(\dfrac{mn}{a}\)|~|\(-\dfrac{mn}{a}\)
+###
+2023|~|284|~|2|~|0|~|\(\dfrac{\cos\theta}{1+\sin\theta} + \dfrac{1+\sin\theta}{\cos\theta} = ?\)|~|\(\sec\theta\)|~|\(2\sin\theta\)|~|\(2\sec\theta\)|~|\(2\cos\theta\)
+###
+2023|~|285|~|2|~|0|~|If \(\displaystyle\int_1^3 f(x)\,dx = 5\) then \(\displaystyle\int_1^3 3f(x)\,dx = ?\)|~|5|~|3|~|15|~|18
+###
+2023|~|286|~|0|~|0|~|\(\dfrac{1 + \cos 4x}{2} = ?\)|~|\(\cos^2 2x\)|~|\(\sin^2 2x\)|~|\(\cos^2 x\)|~|\(\sin^2 x\)
+###
+2023|~|287|~|1|~|0|~|\(\displaystyle\int \dfrac{2x}{x^2+1}\,dx = ?\)|~|\(\tan^{-1} x + c\)|~|\(\ln(x^2+1) + c\)|~|\(2\ln(x^2+1) + c\)|~|\(\dfrac{1}{x^2+1} + c\)
+###
+2023|~|288|~|3|~|1|~|In a G.P., \(T_2 = 6\) and \(T_5 = 48\); the sum of the first 10 terms is (computed \(S_{10} = 3069\), not among options)|~|3018|~|3085|~|3010|~|None
+###
+2023|~|289|~|1|~|0|~|\(\displaystyle\int \left(\sqrt{x} + \dfrac{1}{\sqrt{x}}\right)^2 dx = ?\)|~|\(\dfrac{x^2}{2} + 2x + \ln x + c\)|~|\(\dfrac{x^2}{2} + 2x + \ln x + c\)|~|\(x^2 + 2x + \ln x + c\)|~|None
+###
+2023|~|290|~|0|~|0|~|\(\displaystyle\int \ln x\,dx = ?\)|~|\(x\ln x - x + c\)|~|\(x\ln x + x + c\)|~|\(\ln x - x + c\)|~|\(\dfrac{1}{x} + c\)
+###
+2023|~|291|~|2|~|0|~|If the eccentricity is \(\dfrac32\) then the conic is|~|Ellipse|~|Parabola|~|Hyperbola|~|Circle
+###
+2023|~|292|~|1|~|0|~|\(\begin{vmatrix}1&0&0\\0&\omega&0\\0&0&\omega^2\end{vmatrix} = ?\)|~|\(\omega\)|~|1|~|\(\omega^2\)|~|0
+###
+2023|~|293|~|0|~|0|~|\(\displaystyle\int x \cot x^2\,dx = ?\)|~|\(\dfrac12 \ln\sin x^2 + c\)|~|\(\ln\sin x^2 + c\)|~|\(2\ln\sin x^2 + c\)|~|None
+###
+2023|~|294|~|1|~|0|~|\(\dfrac{d}{dx}\ln(x^2 + x) = ?\)|~|\(\dfrac{1}{x^2+x}\)|~|\(\dfrac{2x+1}{x^2+x}\)|~|\(\dfrac{2x-1}{x^2+x}\)|~|\(\dfrac{2x+1}{x^2-x}\)
+###
+2023|~|295|~|2|~|0|~|If \(x = 45^\circ\), the value of \(2 - \cos 2x - \sin 2x = ?\)|~|\(-1\)|~|0|~|1|~|2
+###
+2023|~|296|~|2|~|0|~|The term independent of \(x\) in \(\left(x^2 - \dfrac{2}{x^2}\right)^{12}\) is|~|8064|~|\(-8064\)|~|59136|~|\(-59136\)
+###
+2023|~|297|~|2|~|0|~|\(f(x) = \sin x\) then \(f''(x) = ?\)|~|\(\cos x\)|~|\(-\cos x\)|~|\(-\sin x\)|~|\(\sin x\)
+###
+2023|~|298|~|1|~|0|~|\(\dfrac13,\ 1\tfrac23,\ 3,\ \ldots\) then \(T_n\) of the sequence is|~|\(\dfrac13(4n + 3)\)|~|\(\dfrac13(4n - 3)\)|~|\(\dfrac12(4n - 3)\)|~|\(\dfrac15(4n - 3)\)
+###
+2023|~|299|~|1|~|0|~|\(x^2 + y^2 - 6x + 8y - 12 = 0\) then the centre of the circle is|~|\((-3,4)\)|~|\((3,-4)\)|~|\((6,-8)\)|~|\((-6,8)\)
+###
+2023|~|300|~|1|~|0|~|\(y = 6x^2\) then the slope at \(x = 1\) is|~|6|~|12|~|3|~|36
+###
+2023|~|301|~|0|~|0|~|\(\displaystyle\int \dfrac{dx}{\sqrt{9 - x^2}} = ?\)|~|\(\sin^{-1}\left(\dfrac{x}{3}\right) + c\)|~|\(\sin^{-1}(3x) + c\)|~|\(\dfrac13 \sin^{-1}(x) + c\)|~|\(\tan^{-1}\left(\dfrac{x}{3}\right) + c\)
+###
+2023|~|302|~|0|~|0|~|\((\cos\theta + i\sin\theta)^n = ?\)|~|\(\cos n\theta + i\sin n\theta\)|~|\(\cos\theta + i\sin n\theta\)|~|\(\cos n\theta + i\sin\theta\)|~|\(\cos\theta - i\sin n\theta\)
+###
+2023|~|303|~|1|~|0|~|For any square matrix \(A = -A^t\) then \(A\) is|~|Symmetric|~|Skew symmetric|~|Idempotent|~|Involuntary
+###
+2023|~|304|~|1|~|0|~|\(\displaystyle\lim_{x\to0} x\ln x = ?\)|~|1|~|0|~|\(-1\)|~|\(\infty\)
+###
+2023|~|305|~|1|~|0|~|\(\displaystyle\int \dfrac{f'(x)}{f(x)}\,dx = ?\)|~|\(f(x) + c\)|~|\(\ln f(x) + c\)|~|\(\ln f'(x) + c\)|~|None
+###
+2023|~|306|~|0|~|0|~|From a deck of 52 cards, the probability of a red king is|~|\(\dfrac{1}{26}\)|~|\(\dfrac{1}{52}\)|~|\(\dfrac{1}{13}\)|~|\(\dfrac{2}{13}\)
+###
+2023|~|307|~|0|~|0|~|If \(A, G, H\) are the arithmetic, geometric and harmonic means, then|~|\(G^2 = AH\)|~|\(A^2 = GH\)|~|\(H^2 = AG\)|~|\(G = AH\)
+###
+2023|~|308|~|1|~|0|~|Range of \(\cos x\) is|~|\((-1,1)\)|~|\([-1,1]\)|~|\((-\infty,\infty)\)|~|\([0,1]\)
+###
+2023|~|309|~|2|~|0|~|\(i^{16} + i^{32} - i^{67} = ?\)|~|\(2 - i\)|~|\(2\)|~|\(i + 2\)|~|\(-i\)
+###
+2023|~|310|~|2|~|0|~|Solve for \((a,b)\): \(\begin{vmatrix}1&a&b\\1&x&b\\1&c&x\end{vmatrix} = 0\)|~|\((a,b)\)|~|\((a^2,a)\)|~|\((a^2,b^2)\)|~|\((b,b^2)\)
+###
+2023|~|311|~|0|~|0|~|\(\displaystyle\int \dfrac{dx}{ax+b} = ?\)|~|\(\dfrac1a \ln(ax+b) + c\)|~|\(\ln(ax+b) + c\)|~|\(\dfrac{\ln(ax+b)}{2} + c\)|~|None
+###
+2023|~|312|~|2|~|0|~|\(\displaystyle\int_0^{\pi/2} \cos^4 x\,dx = ?\)|~|\(\dfrac{\pi}{2}\)|~|\(\dfrac{3\pi}{8}\)|~|\(\dfrac{3\pi}{16}\)|~|\(\dfrac{7\pi}{16}\)
+###
+2023|~|313|~|1|~|0|~|\(\cos 3x = \dfrac12\) then the solution is|~|\(\mathrm{Arc}\cos\left(\dfrac12\right)\)|~|\(\dfrac13 \mathrm{Arc}\cos\left(\dfrac12\right)\)|~|\(3\,\mathrm{Arc}\cos\left(\dfrac12\right)\)|~|\(\cos^{-1}\left(\dfrac12\right)\)
+###
+</script>
+<script>
+(function(){
+  "use strict";
+  var LABELS=['A','B','C','D'];
+
+  /* ---------- parse embedded data ---------- */
+  function parseData(){
+    var raw=document.getElementById('qdata').textContent;
+    var blocks=raw.split(/\n###\n?/);
+    var out=[];
+    for(var i=0;i<blocks.length;i++){
+      var b=blocks[i].trim();
+      if(!b) continue;
+      var f=b.split('|~|');
+      if(f.length<9) continue;
+      out.push({
+        paper:f[0].trim(),
+        num:f[1].trim(),
+        correct:parseInt(f[2],10),
+        uncertain:f[3].trim()==='1',
+        q:f[4],
+        opts:[f[5],f[6],f[7],f[8]]
+      });
+    }
+    return out;
+  }
+  var ALL=parseData();
+  var COUNT2025=ALL.filter(function(x){return x.paper==='2025';}).length;
+  var COUNT2023=ALL.filter(function(x){return x.paper==='2023';}).length;
+
+  /* ---------- state ---------- */
+  var deck=[];        // active shuffled questions
+  var answers=[];     // chosen index or null
+  var idx=0;
+  var startTime=0, timerId=null, elapsed=0;
+  var filterPaper='all';
+  var rvFilter='all';
+
+  /* ---------- helpers ---------- */
+  function $(id){return document.getElementById(id);}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function fmt(sec){var m=Math.floor(sec/60),s=sec%60;return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
+  function show(name){
+    ['cover','quiz','results','review'].forEach(function(n){
+      $(n).classList.toggle('active',n===name);
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function typeset(el){
+    if(window.MathJax&&window.MathJax.typesetPromise){
+      window.MathJax.typesetClear&&window.MathJax.typesetClear([el]);
+      window.MathJax.typesetPromise([el]).catch(function(){});
+    }
+  }
+
+  /* ---------- cover ---------- */
+  function initCover(){
+    $('stTotal').textContent=ALL.length;
+    $('pnAll').textContent=ALL.length+' questions';
+    $('pn2025').textContent=COUNT2025+' questions';
+    $('pn2023').textContent=COUNT2023+' questions';
+    updatePick();
+    var picks=document.querySelectorAll('#picks .pick');
+    picks.forEach(function(p){
+      p.addEventListener('click',function(){
+        picks.forEach(function(x){x.classList.remove('sel');});
+        p.classList.add('sel');
+        filterPaper=p.getAttribute('data-paper');
+        updatePick();
+      });
+    });
+    $('startBtn').addEventListener('click',startTest);
+  }
+  function updatePick(){
+    var n=filterPaper==='all'?ALL.length:(filterPaper==='2025'?COUNT2025:COUNT2023);
+    $('stPick').textContent=n;
+  }
+
+  /* ---------- start ---------- */
+  function startTest(){
+    var pool=ALL.filter(function(x){return filterPaper==='all'||x.paper===filterPaper;});
+    deck=shuffle(pool.slice());
+    answers=deck.map(function(){return null;});
+    idx=0;
+    elapsed=0;
+    startTime=Date.now();
+    if(timerId) clearInterval(timerId);
+    timerId=setInterval(tick,1000);
+    buildNav();
+    renderQ();
+    show('quiz');
+  }
+  function tick(){
+    elapsed=Math.floor((Date.now()-startTime)/1000);
+    var t=$('hTimer');
+    t.textContent=fmt(elapsed);
+    if(elapsed>=5400){t.classList.add('warn');}else{t.classList.remove('warn');}
+  }
+
+  /* ---------- render question ---------- */
+  function renderQ(){
+    var q=deck[idx];
+    var tags='<span class="qnum">Q'+(idx+1)+'</span>'+
+             '<span class="tag tag-src">'+q.paper+' Paper</span>';
+    if(q.uncertain) tags+='<span class="tag tag-unc">answer uncertain</span>';
+    $('qtags').innerHTML=tags;
+    $('qtext').innerHTML=q.q;
+
+    var chosen=answers[idx];
+    var locked=chosen!==null;
+    var html='';
+    for(var i=0;i<4;i++){
+      var cls='opt';
+      if(locked){
+        cls+=' locked';
+        if(i===q.correct) cls+=' correct';
+        else if(i===chosen) cls+=' wrong';
+        else cls+=' dim';
+      }
+      html+='<button class="'+cls+'" data-i="'+i+'">'+
+              '<span class="lab">'+LABELS[i]+'</span>'+
+              '<span class="ot">'+q.opts[i]+'</span></button>';
+    }
+    $('opts').innerHTML=html;
+
+    if(!locked){
+      Array.prototype.forEach.call($('opts').children,function(btn){
+        btn.addEventListener('click',function(){choose(parseInt(btn.getAttribute('data-i'),10));});
+      });
+      $('fb').className='fb';$('fb').innerHTML='';
+    }else{
+      showFeedback();
+    }
+
+    $('hPos').textContent=(idx+1)+' / '+deck.length;
+    $('prevBtn').disabled=idx===0;
+    $('nextBtn').disabled=idx===deck.length-1;
+    updateCounters();
+    updateNavActive();
+    typeset($('quiz'));
+  }
+
+  function showFeedback(){
+    var q=deck[idx], chosen=answers[idx];
+    var fb=$('fb');
+    if(chosen===q.correct){
+      fb.className='fb show ok';
+      fb.innerHTML='Correct. The answer is '+LABELS[q.correct]+'.'+
+        (q.uncertain?'<span class="note">This item was flagged uncertain; confirm with your own working.</span>':'');
+    }else{
+      fb.className='fb show no';
+      fb.innerHTML='Not quite. The correct answer is '+LABELS[q.correct]+'.'+
+        (q.uncertain?'<span class="note">This item was flagged uncertain; confirm with your own working.</span>':'');
+    }
+  }
+
+  function choose(i){
+    if(answers[idx]!==null) return;
+    answers[idx]=i;
+    renderQ();
+    buildNavCell(idx);
+  }
+
+  function updateCounters(){
+    var ok=0,ans=0;
+    for(var i=0;i<deck.length;i++){
+      if(answers[i]!==null){ans++;if(answers[i]===deck[i].correct)ok++;}
+    }
+    $('hCorrect').textContent=ok+' correct';
+    $('hAnswered').textContent=ans+' answered';
+    $('qbar').style.width=(deck.length?(ans/deck.length*100):0)+'%';
+    $('topfill').style.width=(deck.length?((idx+1)/deck.length*100):0)+'%';
+  }
+
+  /* ---------- navigator ---------- */
+  function buildNav(){
+    var g=$('navgrid');g.innerHTML='';
+    for(var i=0;i<deck.length;i++){
+      var c=document.createElement('button');
+      c.className='ncell';c.textContent=i+1;c.setAttribute('data-i',i);
+      c.addEventListener('click',function(){idx=parseInt(this.getAttribute('data-i'),10);renderQ();});
+      g.appendChild(c);
+    }
+  }
+  function buildNavCell(i){
+    var c=$('navgrid').children[i];
+    if(!c)return;
+    c.classList.remove('ok','no');
+    if(answers[i]!==null){
+      c.classList.add(answers[i]===deck[i].correct?'ok':'no');
+    }
+  }
+  function updateNavActive(){
+    var cells=$('navgrid').children;
+    for(var i=0;i<cells.length;i++){
+      cells[i].classList.toggle('cur',i===idx);
+    }
+  }
+
+  /* ---------- finish + results ---------- */
+  function finish(){
+    if(timerId) clearInterval(timerId);
+    var ok=0,wrong=0,skip=0;
+    for(var i=0;i<deck.length;i++){
+      if(answers[i]===null) skip++;
+      else if(answers[i]===deck[i].correct) ok++;
+      else wrong++;
+    }
+    var pct=deck.length?Math.round(ok/deck.length*100):0;
+    $('rScore').textContent=pct+'%';
+    $('rLabel').textContent=ok+' of '+deck.length+' correct';
+    $('rCorrect').textContent=ok;
+    $('rWrong').textContent=wrong;
+    $('rSkipped').textContent=skip;
+    $('rTime').textContent=fmt(elapsed);
+    show('results');
+  }
+
+  /* ---------- review ---------- */
+  function buildReview(){
+    var ok=0;for(var i=0;i<deck.length;i++){if(answers[i]!==null&&answers[i]===deck[i].correct)ok++;}
+    $('rvSub').textContent='Every question with your answer and the correct answer. Filter below.';
+    renderReview();
+    show('review');
+    typeset($('review'));
+  }
+  function renderReview(){
+    var list=$('rvList');list.innerHTML='';
+    for(var i=0;i<deck.length;i++){
+      var q=deck[i], ch=answers[i];
+      var stat = ch===null?'sk':(ch===q.correct?'ok':'no');
+      if(rvFilter!=='all'&&rvFilter!==stat) continue;
+      var statTxt = stat==='ok'?'Correct':(stat==='no'?'Wrong':'Skipped');
+      var div=document.createElement('div');
+      div.className='rv '+stat;
+      var h='<div class="rvtags"><span class="rvn">Q'+(i+1)+'</span>'+
+            '<span class="rvn">'+q.paper+'</span>'+
+            (q.uncertain?'<span class="tag tag-unc">uncertain</span>':'')+
+            '<span class="rvstat '+stat+'">'+statTxt+'</span></div>';
+      h+='<div class="rvq">'+q.q+'</div>';
+      if(ch===null){
+        h+='<div class="rvans">Your answer: <b>not answered</b></div>';
+      }else{
+        h+='<div class="rvans '+(ch===q.correct?'cans':'yans-no')+'">Your answer: <b>'+LABELS[ch]+'.</b> '+q.opts[ch]+'</div>';
+      }
+      h+='<div class="rvans cans">Correct answer: <b>'+LABELS[q.correct]+'.</b> '+q.opts[q.correct]+'</div>';
+      div.innerHTML=h;
+      list.appendChild(div);
+    }
+    if(!list.children.length){
+      list.innerHTML='<div class="rv sk"><div class="rvq" style="margin:0">Nothing in this category.</div></div>';
+    }
+    typeset(list);
+  }
+
+  /* ---------- wire up ---------- */
+  function init(){
+    initCover();
+    $('prevBtn').addEventListener('click',function(){if(idx>0){idx--;renderQ();}});
+    $('nextBtn').addEventListener('click',function(){if(idx<deck.length-1){idx++;renderQ();}});
+    $('finishBtn').addEventListener('click',finish);
+    $('finishTop').addEventListener('click',finish);
+    $('reviewBtn').addEventListener('click',buildReview);
+    $('restartBtn').addEventListener('click',startTest);
+    $('homeBtn').addEventListener('click',function(){if(timerId)clearInterval(timerId);show('cover');});
+    $('rvBack').addEventListener('click',function(){show('results');});
+    document.querySelectorAll('.rvf').forEach(function(b){
+      b.addEventListener('click',function(){
+        document.querySelectorAll('.rvf').forEach(function(x){x.classList.remove('sel');});
+        b.classList.add('sel');
+        rvFilter=b.getAttribute('data-f');
+        renderReview();
+      });
+    });
+  }
+  init();
+})();
+
+</script>
+</body>
+</html>

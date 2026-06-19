@@ -11,3 +11,9 @@ Desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+# Project dependencies & deployments
+node_modules/
+.netlify/
+package.json
+package-lock.json
